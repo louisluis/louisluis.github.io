@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>窗台烧烤 · 菜单</title>
+  <style>
+    :root{
+      --bg:#0b0d10;
+      --text:#e8eef6;
+      --muted:#a8b3c2;
+      --line:rgba(255,255,255,.08);
+      --accent:#7dd3fc;    /* 冰蓝 */
+      --accent2:#a7f3d0;   /* 薄荷 */
+      --warn:#fde68a;      /* 柔黄 */
+      --shadow: 0 18px 55px rgba(0,0,0,.55);
+      --r:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif;
+      background: radial-gradient(1200px 700px at 20% -10%, rgba(125,211,252,.18), transparent 55%),
+                  radial-gradient(900px 500px at 90% 0%, rgba(167,243,208,.12), transparent 55%),
+                  linear-gradient(180deg, #07090c 0%, var(--bg) 40%, #07090c 100%);
+      color:var(--text);
+    }
+    .wrap{max-width:1050px;margin:0 auto;padding:18px 16px 96px}
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(11,13,16,.9) 0%, rgba(11,13,16,.65) 65%, rgba(11,13,16,0) 100%);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .topbar .inner{max-width:1050px;margin:0 auto;padding:12px 16px;display:flex;gap:12px;align-items:center;justify-content:space-between}
+    .brand{display:flex;gap:10px;align-items:center;min-width:0}
+    .logo{
+      width:36px;height:36px;border-radius:12px;
+      background: linear-gradient(135deg, rgba(125,211,252,.35), rgba(167,243,208,.25));
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow: 0 10px 25px rgba(0,0,0,.35);
+      display:grid;place-items:center;
+      font-weight:800;
+      letter-spacing:.08em;
+    }
+    .brand h1{font-size:14px;margin:0;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .brand p{margin:2px 0 0;color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .chiprow{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .chip{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(18,22,28,.7);
+      color: var(--text);
+      padding:8px 10px;
+      border-radius:999px;
+      font-size:12px;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .08s ease, border-color .15s ease, background .15s ease;
+    }
+    .chip:hover{transform:translateY(-1px);border-color:rgba(125,211,252,.35)}
+    .chip.active{border-color:rgba(125,211,252,.60);background:rgba(125,211,252,.10)}
+    .hero{padding:18px 0 6px}
+    .heroGrid{display:grid;grid-template-columns: 1.2fr .8fr;gap:14px}
+    @media (max-width:900px){.heroGrid{grid-template-columns:1fr}}
+    .card{
+      background: linear-gradient(180deg, rgba(18,22,28,.95) 0%, rgba(13,16,21,.92) 100%);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+    }
+    .card.pad{padding:16px}
+    .kicker{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:12px;flex-wrap:wrap}
+    .pill{
+      display:inline-flex;align-items:center;gap:6px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      padding:6px 10px;border-radius:999px;
+      font-size:12px;color:var(--muted);
+    }
+    .title{margin:10px 0 8px;font-size:28px;line-height:1.15;letter-spacing:.02em}
+    .subtitle{margin:0;color:var(--muted);font-size:13px;line-height:1.6}
+    .quickRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .seg{
+      flex:1;min-width:160px;
+      background: rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: 14px;
+      padding:12px;
+    }
+    .seg h3{margin:0 0 6px;font-size:13px}
+    .seg p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}
+    .btnRow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      padding:9px 10px;
+      border-radius: 12px;
+      font-size:12px;
+      cursor:pointer;
+      transition: transform .08s ease, border-color .15s ease, background .15s ease;
+    }
+    .btn:hover{transform:translateY(-1px);border-color:rgba(167,243,208,.45)}
+    .btn.primary{border-color:rgba(125,211,252,.55);background:rgba(125,211,252,.10)}
+    .btn.warn{border-color:rgba(253,230,138,.55);background:rgba(253,230,138,.10)}
+    .rightCard .title2{margin:0 0 10px;font-size:16px}
+    .stack{display:grid;gap:10px}
+    .mini{
+      padding:12px;border-radius:16px;
+      background: rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .mini h4{margin:0 0 6px;font-size:13px}
+    .mini .row{display:flex;gap:8px;flex-wrap:wrap}
+    .tag{
+      font-size:12px;color:var(--muted);
+      padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      cursor:pointer;
+    }
+    .tag:hover{border-color:rgba(125,211,252,.35)}
+    .section{margin-top:18px}
+    .sectionHead{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin:0 0 10px}
+    .sectionHead h2{margin:0;font-size:16px}
+    .sectionHead p{margin:0;color:var(--muted);font-size:12px}
+    .grid{display:grid;grid-template-columns: repeat(12, 1fr);gap:12px}
+    .col-6{grid-column: span 6}
+    .col-4{grid-column: span 4}
+    .col-3{grid-column: span 3}
+    @media (max-width:900px){.col-6,.col-4{grid-column:span 12}.col-3{grid-column:span 6}}
+    @media (max-width:520px){.col-3{grid-column:span 12}}
+    .item{
+      padding:14px;border-radius: 16px;
+      background: rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      position:relative;overflow:hidden;min-height:86px;
+    }
+    .item::after{
+      content:"";position:absolute; inset:auto -40px -60px auto;
+      width:180px; height:180px;
+      background: radial-gradient(circle at 30% 30%, rgba(125,211,252,.20), transparent 60%);
+      transform: rotate(20deg);pointer-events:none;
+    }
+    .item h3{margin:0 0 6px;font-size:14px;letter-spacing:.01em}
+    .item p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}
+    .meta{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
+    .meta span{
+      font-size:11px;color:var(--muted);
+      padding:5px 8px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+    }
+    .badge{
+      position:absolute; top:10px; right:10px;
+      font-size:11px;padding:5px 9px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+    }
+    .badge.hot{border-color:rgba(253,230,138,.45);background:rgba(253,230,138,.12)}
+    .badge.new{border-color:rgba(167,243,208,.45);background:rgba(167,243,208,.10)}
+    details{
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--r);
+      background: rgba(18,22,28,.62);
+      box-shadow: 0 14px 40px rgba(0,0,0,.35);
+    }
+    details + details{margin-top:12px}
+    summary{
+      list-style:none; cursor:pointer;
+      padding:14px 14px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    summary::-webkit-details-marker{display:none}
+    .sumLeft{display:flex;flex-direction:column;gap:4px}
+    .sumLeft strong{font-size:14px}
+    .sumLeft small{color:var(--muted);font-size:12px}
+    .chev{color:var(--muted);font-size:14px;transition: transform .15s ease}
+    details[open] .chev{transform: rotate(180deg)}
+    .detailsBody{padding:0 14px 14px}
+    .hr{height:1px;background:var(--line);margin:10px 0 12px}
+    .footerNote{
+      margin-top:18px;color: rgba(168,179,194,.9);
+      font-size:12px;line-height:1.7;text-align:center;
+    }
+    .stickyHint{
+      position:fixed;left:0;right:0;bottom:0;z-index:60;
+      background: linear-gradient(180deg, rgba(11,13,16,0) 0%, rgba(11,13,16,.65) 25%, rgba(11,13,16,.92) 100%);
+      padding:12px 16px 16px;
+      pointer-events:none;
+    }
+    .stickyHint .bar{
+      max-width:1050px;margin:0 auto;
+      display:flex;gap:10px;align-items:center;justify-content:space-between;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(18,22,28,.65);
+      border-radius: 999px;
+      padding:10px 12px;
+      box-shadow: 0 14px 45px rgba(0,0,0,.55);
+      pointer-events:auto;
+    }
+    .bar .left{display:flex;gap:8px;align-items:center;min-width:0}
+    .dot{
+      width:10px;height:10px;border-radius:999px;
+      background: linear-gradient(135deg, rgba(125,211,252,.8), rgba(167,243,208,.75));
+      box-shadow: 0 0 0 6px rgba(125,211,252,.09);
+      flex:0 0 auto;
+    }
+    .bar .txt{min-width:0}
+    .bar .txt b{display:block;font-size:12px}
+    .bar .txt span{display:block;color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .bar .right{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .bar .right button{padding:8px 10px;border-radius:999px;font-size:12px}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="inner">
+      <div class="brand">
+        <div class="logo">窗</div>
+        <div style="min-width:0">
+          <h1>窗台烧烤 · 菜单</h1>
+          <p>晚市 · 宵夜｜烤串 + 精酿</p>
+        </div>
+      </div>
+      <div class="chiprow" aria-label="快捷选择">
+        <div class="chip" data-preset="first">第一次来</div>
+        <div class="chip" data-preset="meat">吃肉多</div>
+        <div class="chip" data-preset="noalc">不喝酒</div>
+        <div class="chip" data-preset="light">轻负担</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="hero">
+      <div class="heroGrid">
+        <div class="card pad">
+          <div class="kicker">
+            <span class="pill">不咸不腻 · 慢慢喝</span>
+            <span class="pill">适合：下班小聚 / 外摆微醺</span>
+          </div>
+          <h2 class="title">不想纠结？先按人数选</h2>
+          <p class="subtitle">你选人数，我们给你一个“最省脑、最下酒”的开局。想加点，再慢慢挑。</p>
+
+          <div class="quickRow">
+            <div class="seg">
+              <h3>1 人</h3>
+              <p>一杯 + 一盘，吃得刚好。</p>
+              <div class="btnRow">
+                <button class="btn primary" data-jump="#combo-1">看 1 人组合</button>
+                <button class="btn" data-jump="#beer">先选第一杯</button>
+              </div>
+            </div>
+
+            <div class="seg">
+              <h3>2 人</h3>
+              <p>最推荐：人均更舒服。</p>
+              <div class="btnRow">
+                <button class="btn primary" data-jump="#combo-2">看 2 人组合</button>
+                <button class="btn" data-jump="#skewers">直接看烤串</button>
+              </div>
+            </div>
+
+            <div class="seg">
+              <h3>3–4 人</h3>
+              <p>桌上铺满，氛围更快起来。</p>
+              <div class="btnRow">
+                <button class="btn primary" data-jump="#combo-4">看 3–4 人组合</button>
+                <button class="btn warn" data-jump="#monthly">本月限定</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card pad rightCard">
+          <h3 class="title2">今天怎么点（10 秒版）</h3>
+          <div class="stack">
+            <div class="mini">
+              <h4>今日必点</h4>
+              <div class="row">
+                <span class="tag" data-jump="#item-beef">鲜牛肉串</span>
+                <span class="tag" data-jump="#item-porktendon">猪肉筋串</span>
+                <span class="tag" data-jump="#item-gizzards">掌中宝</span>
+              </div>
+            </div>
+            <div class="mini">
+              <h4>第一杯怎么选</h4>
+              <div class="row">
+                <span class="tag" data-jump="#beer-lager">清爽拉格</span>
+                <span class="tag" data-jump="#beer-wheat">德式小麦</span>
+                <span class="tag" data-jump="#beer-0">无醇 0.0%</span>
+                <span class="tag" data-jump="#na-tea">冷泡茶</span>
+              </div>
+            </div>
+            <div class="mini">
+              <h4>收尾建议</h4>
+              <div class="row">
+                <span class="tag" data-jump="#bread">烤馒头片/吐司</span>
+                <span class="tag" data-jump="#dessert">冰激凌</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 推荐组合 -->
+    <div class="section" id="combos">
+      <div class="sectionHead">
+        <div>
+          <h2>推荐组合</h2>
+          <p>先从“开局答案”开始，舒服又好点。</p>
+        </div>
+        <p>（纯展示：价格可后续补）</p>
+      </div>
+
+      <div class="grid">
+        <div class="item col-4" id="combo-1" data-tags="first light">
+          <span class="badge hot">1人</span>
+          <h3>1人组合</h3>
+          <p>一杯精酿 + 5 串 + 1 份凉菜。吃得刚好，喝得舒服。</p>
+          <div class="meta"><span>不费脑</span><span>清爽开局</span><span>加班友好</span></div>
+        </div>
+
+        <div class="item col-4" id="combo-2" data-tags="first meat">
+          <span class="badge hot">2人推荐</span>
+          <h3>2人组合</h3>
+          <p>2 杯精酿 + 10–12 串 + 1 份炸物 + 1 份凉菜。最省心的一套。</p>
+          <div class="meta"><span>人均更舒服</span><span>下酒必备</span><span>社交友好</span></div>
+        </div>
+
+        <div class="item col-4" id="combo-4" data-tags="meat">
+          <span class="badge new">3–4人</span>
+          <h3>3–4人组合</h3>
+          <p>4 杯精酿 + 18–22 串 + 炸物 + 素菜 + 烤制小食。桌面很快热闹起来。</p>
+          <div class="meta"><span>外摆友好</span><span>更有氛围</span><span>适合分享</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 精酿（6+1）+ 无醇 -->
+    <div class="section" id="beer">
+      <div class="sectionHead">
+        <div><h2>窗台精酿</h2><p>好选的风味分组：清爽 / 果味 / 风味。</p></div>
+        <p>建议：先选第一杯，再点烤串更顺。</p>
+      </div>
+
+      <div class="grid">
+        <div class="item col-3" id="beer-lager" data-tags="first light">
+          <span class="badge hot">默认首杯</span>
+          <h3>清爽拉格</h3>
+          <p>干净清爽，解腻顺口。</p>
+          <div class="meta"><span>清爽</span><span>配一切</span></div>
+        </div>
+
+        <div class="item col-3" id="beer-wheat" data-tags="first">
+          <h3>德式小麦</h3>
+          <p>麦香更足，口感更软。</p>
+          <div class="meta"><span>顺口</span><span>不苦</span></div>
+        </div>
+
+        <div class="item col-3" data-tags="light">
+          <h3>柠檬清饮</h3>
+          <p>微酸更清爽，配烤串很舒服。</p>
+          <div class="meta"><span>清爽</span><span>解腻</span></div>
+        </div>
+
+        <div class="item col-3" data-tags="first">
+          <h3>车厘子微甜</h3>
+          <p>轻甜果香，氛围更容易起来。</p>
+          <div class="meta"><span>微甜</span><span>好入口</span></div>
+        </div>
+
+        <div class="item col-3" data-tags="meat">
+          <h3>淡苦 IPA</h3>
+          <p>酒花微苦，配肉更香。</p>
+          <div class="meta"><span>微苦</span><span>下酒</span></div>
+        </div>
+
+        <div class="item col-3" data-tags="light">
+          <h3>轻酸艾尔</h3>
+          <p>清爽微酸，越喝越轻松。</p>
+          <div class="meta"><span>微酸</span><span>清爽</span></div>
+        </div>
+
+        <div class="item col-6" id="monthly" data-tags="first meat light">
+          <span class="badge new">限量轮换</span>
+          <h3>当月限定精酿</h3>
+          <p>每月都会换一款：想尝鲜，点它就对了。</p>
+          <div class="meta"><span>尝鲜</span><span>限定</span><span>问服务员</span></div>
+        </div>
+
+        <div class="item col-6" id="beer-0" data-tags="noalc light">
+          <span class="badge">精酿 · 0.0%</span>
+          <h3>无醇精酿啤酒</h3>
+          <p>不喝酒，也能喝得像在喝酒：清爽、有气、很体面。</p>
+          <div class="meta"><span>0.0%</span><span>清爽</span><span>不掉队</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 烤串：折叠 -->
+    <div class="section" id="skewers">
+      <div class="sectionHead">
+        <div><h2>烤串</h2><p>按肉类快速找：牛 / 羊 / 鸡 / 猪。</p></div>
+        <p>建议：先选 2–3 种肉类，各来几串更舒服。</p>
+      </div>
+
+      <details open>
+        <summary><div class="sumLeft"><strong>牛肉</strong><small>更香、更顶：配 IPA 很搭。</small></div><div class="chev">▾</div></summary>
+        <div class="detailsBody">
+          <div class="grid">
+            <div class="item col-6" id="item-beef" data-tags="meat first">
+              <span class="badge hot">必点</span>
+              <h3>鲜牛肉串</h3><p>肉香直接、口感扎实。</p>
+              <div class="meta"><span>肉香</span><span>更顶</span></div>
+            </div>
+            <div class="item col-6" data-tags="meat">
+              <h3>牛肋条串</h3><p>带一点筋道，更耐嚼。</p>
+              <div class="meta"><span>筋道</span><span>耐嚼</span></div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary><div class="sumLeft"><strong>羊肉</strong><small>孜然一配就对了：很下酒。</small></div><div class="chev">▾</div></summary>
+        <div class="detailsBody">
+          <div class="grid">
+            <div class="item col-6" data-tags="meat">
+              <h3>内蒙古鲜羊肉串</h3><p>羊香更干净，越吃越顺。</p>
+              <div class="meta"><span>羊香</span><span>下酒</span></div>
+            </div>
+            <div class="item col-6" data-tags="meat">
+              <h3>羊排肉串</h3><p>更厚实，存在感更强。</p>
+              <div class="meta"><span>厚实</span><span>更顶</span></div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary><div class="sumLeft"><strong>鸡肉</strong><small>更轻松：第一轮很稳。</small></div><div class="chev">▾</div></summary>
+        <div class="detailsBody">
+          <div class="grid">
+            <div class="item col-4" data-tags="first">
+              <h3>鸡中翅</h3><p>外香里嫩，很容易吃完一盘。</p>
+              <div class="meta"><span>外香</span><span>好下口</span></div>
+            </div>
+            <div class="item col-4" data-tags="first">
+              <h3>鸡腿肉串</h3><p>肉更嫩，口感更舒服。</p>
+              <div class="meta"><span>嫩</span><span>顺口</span></div>
+            </div>
+            <div class="item col-4" id="item-gizzards" data-tags="meat first">
+              <span class="badge hot">必点</span>
+              <h3>掌中宝</h3><p>脆脆的，越嚼越香。</p>
+              <div class="meta"><span>脆</span><span>很下酒</span></div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary><div class="sumLeft"><strong>猪肉</strong><small>武汉味：猪肉筋一定要试。</small></div><div class="chev">▾</div></summary>
+        <div class="detailsBody">
+          <div class="grid">
+            <div class="item col-4" data-tags="meat">
+              <h3>五花肉串</h3><p>油香足，配拉格更舒服。</p>
+              <div class="meta"><span>油香</span><span>解腻搭</span></div>
+            </div>
+            <div class="item col-4" data-tags="meat">
+              <h3>猪颈肉串</h3><p>更香更嫩，存在感强。</p>
+              <div class="meta"><span>嫩</span><span>更香</span></div>
+            </div>
+            <div class="item col-4" id="item-porktendon" data-tags="meat first">
+              <span class="badge hot">湖北风味</span>
+              <h3>猪肉筋串</h3><p>筋道带香，越吃越上头。</p>
+              <div class="meta"><span>筋道</span><span>本地记忆</span></div>
+            </div>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <!-- 小食与收尾 -->
+    <div class="section" id="sides">
+      <div class="sectionHead">
+        <div><h2>小食与收尾</h2><p>凉菜解腻，炸物下酒，甜点收口。</p></div>
+        <p></p>
+      </div>
+
+      <details open>
+        <summary><div class="sumLeft"><strong>素烤</strong><small>解腻搭配：第二轮更舒服。</small></div><div class="chev">▾</div></summary>
+        <div class="detailsBody">
+          <div class="grid">
+            <div class="item col-3" data-tags="light"><h3>烤土豆片</h3><p>香脆、很稳。</p><div class="meta"><span>解腻</span></div></div>
+            <div class="item col-3" data-tags="light"><h3>烤西葫芦</h3><p>清爽、好入口。</p><div class="meta"><span>清爽</span></div></div>
+            <div class="item col-3" data-tags="light"><h3>烤青椒</h3><p>更香，更下酒。</p><div class="meta"><span>香</span></div></div>
+            <div class="item col-3" data-tags="light"><h3>烤茄子</h3><p>软糯，很舒服。</p><div class="meta"><span>软糯</span></div></div>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary><div class="sumLeft"><strong>凉菜</strong><small>先垫一口：不饿着等串。</small></div><div class="chev">▾</div></summary>
+        <div class="detailsBody">
+          <div class="grid">
+            <div class="item col-4" data-tags="light first"><h3>拍黄瓜</h3><p>清爽解腻。</p><div class="meta"><span>清爽</span></div></div>
+            <div class="item col-4" data-tags="first"><h3>油炸花生米</h3><p>下酒很稳。</p><div class="meta"><span>下酒</span></div></div>
+            <div class="item col-4" data-tags="light"><h3>湖北凉拌藕带</h3><p>清爽脆口，湖北味。</p><div class="meta"><span>本地</span><span>解腻</span></div></div>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary><div class="sumLeft"><strong>炸物小食</strong><small>下酒必点：桌面更热闹。</small></div><div class="chev">▾</div></summary>
+        <div class="detailsBody">
+          <div class="grid">
+            <div class="item col-3" data-tags="meat first"><h3>薯条</h3><p>热乎酥脆，越吃越停不下来。</p><div class="meta"><span>下酒</span></div></div>
+            <div class="item col-3" data-tags="meat"><h3>藕条</h3><p>更脆、更香。</p><div class="meta"><span>脆</span></div></div>
+            <div class="item col-3" data-tags="meat"><h3>鸡米花</h3><p>小口快乐，配酒很稳。</p><div class="meta"><span>好入口</span></div></div>
+            <div class="item col-3" data-tags="meat"><h3>小酥肉</h3><p>外酥里嫩，很抓人。</p><div class="meta"><span>下酒</span></div></div>
+          </div>
+        </div>
+      </details>
+
+      <details id="bread">
+        <summary><div class="sumLeft"><strong>烤制小食</strong><small>垫肚收口：更舒服。</small></div><div class="chev">▾</div></summary>
+        <div class="detailsBody">
+          <div class="grid">
+            <div class="item col-6" data-tags="first"><h3>烤吐司</h3><p>简单但很香，越吃越顺。</p><div class="meta"><span>垫肚</span></div></div>
+            <div class="item col-6" data-tags="first"><h3>烤馒头片</h3><p>更耐吃，收尾很稳。</p><div class="meta"><span>收口</span></div></div>
+          </div>
+        </div>
+      </details>
+
+      <details id="dessert">
+        <summary><div class="sumLeft"><strong>甜点</strong><small>吃完来一口，刚刚好。</small></div><div class="chev">▾</div></summary>
+        <div class="detailsBody">
+          <div class="grid">
+            <div class="item col-6" data-tags="light"><h3>香草冰激凌</h3><p>清爽收尾。</p><div class="meta"><span>收尾</span></div></div>
+            <div class="item col-6" data-tags="light"><h3>巧克力冰激凌</h3><p>更满足。</p><div class="meta"><span>收尾</span></div></div>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <!-- 无酒精 -->
+    <div class="section" id="na">
+      <div class="sectionHead">
+        <div><h2>无酒精 · 不将就</h2><p>不喝酒，也能喝得舒服。</p></div>
+        <p></p>
+      </div>
+
+      <div class="grid">
+        <div class="item col-4" data-tags="noalc light"><h3>无糖气泡水</h3><p>清爽有气，解腻不负担。</p><div class="meta"><span>0糖</span><span>清爽</span></div></div>
+        <div class="item col-4" data-tags="noalc"><h3>零糖可乐</h3><p>经典口味，配烤串很稳。</p><div class="meta"><span>0糖</span><span>经典</span></div></div>
+        <div class="item col-4" data-tags="noalc"><h3>零糖雪碧</h3><p>更清爽，喝起来很轻。</p><div class="meta"><span>0糖</span><span>清爽</span></div></div>
+        <div class="item col-6" id="na-tea" data-tags="noalc light"><h3>冷泡茶（无糖）</h3><p>乌龙 / 茉莉风味，配辣更舒服。</p><div class="meta"><span>无糖</span><span>解腻</span></div></div>
+        <div class="item col-6" data-tags="noalc meat"><h3>姜汁汽水</h3><p>辛口更有“成人感”，配烧烤很搭。</p><div class="meta"><span>辛口</span><span>下酒感</span></div></div>
+      </div>
+
+      <div class="footerNote">
+        <div class="hr"></div>
+        <div>提示：本页面为菜单展示结构示例，可按门店实际定价与供应情况随时更新。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stickyHint">
+    <div class="bar">
+      <div class="left">
+        <div class="dot"></div>
+        <div class="txt">
+          <b>不想纠结？</b>
+          <span>先选人数组合 → 再按心情加点</span>
+        </div>
+      </div>
+      <div class="right">
+        <button class="btn primary" data-jump="#combos">看推荐组合</button>
+        <button class="btn" data-jump="#beer">选第一杯</button>
+        <button class="btn" data-jump="#skewers">看烤串</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 平滑跳转
+    function jumpTo(selector){
+      const el = document.querySelector(selector);
+      if(!el) return;
+      const top = el.getBoundingClientRect().top + window.scrollY - 74;
+      window.scrollTo({top, behavior:'smooth'});
+    }
+    document.querySelectorAll('[data-jump]').forEach(btn=>{
+      btn.addEventListener('click', ()=> jumpTo(btn.getAttribute('data-jump')));
+    });
+
+    // 快捷预设：命中更亮，未命中稍暗（不隐藏，避免“找不到”）
+    const chips = Array.from(document.querySelectorAll('.chip'));
+    const items = Array.from(document.querySelectorAll('[data-tags]'));
+
+    function setPreset(preset){
+      chips.forEach(c=> c.classList.toggle('active', c.dataset.preset===preset));
+      items.forEach(it=>{
+        const tags = (it.dataset.tags || '').split(/\s+/).filter(Boolean);
+        const hit = tags.includes(preset);
+        if(preset){
+          it.style.opacity = hit ? '1' : '.55';
+          it.style.filter = hit ? 'none' : 'saturate(.8)';
+        }else{
+          it.style.opacity = '1';
+          it.style.filter = 'none';
+        }
+      });
+    }
+    chips.forEach(c=>{
+      c.addEventListener('click', ()=>{
+        const preset = c.dataset.preset;
+        const isActive = c.classList.contains('active');
+        setPreset(isActive ? null : preset);
+      });
+    });
+  </script>
+</body>
+</html>
