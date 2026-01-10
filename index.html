@@ -146,35 +146,35 @@
       sections:[
         { title:"烤串", hint:"肉串：3串起点。价格按单串显示。", groups:[
           { title:"牛肉", items:[
-            mkMeat("鲜牛肉串", "原切，偏瘦", 6, IMG.beef),
-            mkMeat("牛肋条串", "肥瘦相间", 7, IMG.beef),
+            mkMeat("现串鲜牛肉串", "原切，偏瘦", 3, IMG.beef),
+            mkMeat("原切牛肋条串", "肥瘦相间", 4.5, IMG.beef),
           ]},
           { title:"羊肉", items:[
-            mkMeat("内蒙古鲜羊肉串", "羊味轻", 7, IMG.lamb),
-            mkMeat("羊排肉串", "肥瘦相间", 8, IMG.lamb),
+            mkMeat("内蒙古鲜羊肉串", "羊味轻", 4, IMG.lamb),
+            mkMeat("原切羊排肉串", "肥瘦相间", 4.5, IMG.lamb),
           ]},
           { title:"鸡肉", items:[
-            mkMeat("鸡中翅", "常规口味", 6, IMG.chicken),
-            mkMeat("鸡腿肉串", "偏嫩", 6, IMG.chicken),
-            mkMeat("掌中宝", "脆口", 7, IMG.chicken),
+            mkPortion("焦香鸡中翅", "一份两个", 12, IMG.chicken),
+            mkMeat("葱香鸡腿肉串", "嫩", 3, IMG.chicken),
+            mkMeat("脆弹掌中宝", "脆口", 3.5, IMG.chicken),
           ]},
           { title:"猪肉", items:[
-            mkMeat("猪肉筋串", "武汉特色", 6, IMG.pork),
-            mkMeat("原切香辣五花肉串", "原切，大块", 7, IMG.pork),
-            mkMeat("猪颈肉串", "嫩", 8, IMG.pork),
+            mkMeat("猪肉筋串", "武汉特色", 2, IMG.pork),
+            mkMeat("厚切五花肉串", "原切，大块", 3.5, IMG.pork),
+            mkMeat("猪颈肉串", "嫩", 3.5, IMG.pork),
           ]},
           { title:"鱼", items:[
-            mkMeat("香辣财鱼片", "武汉特色", 6, "串", IMG.fish),
+            mkMeat("香辣财鱼片", "湖北特色", 3.5, "串", IMG.fish),
           ]},
           { title:"素烤（按份）", items:[
-            mkPortion("烤土豆片", "切片烤", 12, "份", IMG.veg),
-            mkPortion("烤西葫芦", "切片烤", 12, "份", IMG.veg),
-            mkPortion("烤青椒", "香辣", 12, "份", IMG.veg),
-            mkPortion("烤茄子", "蒜香", 14, "份", IMG.veg),
+            mkPortion("薄切土豆片", "", 7, "份", IMG.veg),
+            mkPortion("清甜西葫芦", "切片烤", 7, "份", IMG.veg),
+            mkPortion("烤韭菜", "香辣", 10, "份", IMG.veg),
+            mkPortion("软糯烤茄子", "蒜香", 12, "份", IMG.veg),
           ]},
           { title:"烤制碳水小食（按份）", items:[
-            mkPortion("烤吐司", "甜口", 10, "份", IMG.bread),
-            mkPortion("烤馒头片", "外酥里软", 10, "份", IMG.bread),
+            mkPortion("烤吐司", "甜口", 8, "份", IMG.bread),
+            mkPortion("烤奶香小馒头", "外酥里软", 8, "份", IMG.bread),
           ]},
         ]}
       ]
@@ -183,13 +183,13 @@
       sections:[
         { title:"凉菜 & 小食", hint:"不一定现在点，吃着看要不要加", groups:[
           { title:"凉菜", items:[
-            mkPortion("拍黄瓜", "", 10, "份", IMG.cold),
-            mkPortion("花生米", "", 10, "份", IMG.cold),
-            mkPortion("洪湖凉拌藕带", "酸脆", 16, "份", IMG.lotus),
+            mkPortion("拍黄瓜", "", 12, "份", IMG.cold),
+            mkPortion("椒盐花生米", "", 10, "份", IMG.cold),
+            mkPortion("洪湖凉拌藕带", "酸脆", 14, "份", IMG.lotus),
           ]},
           { title:"炸物小食", items:[
-            mkPortion("薯条", "原切大薯条", 18, "份", IMG.fries),
-            mkPortion("洪湖藕条", "下酒", 18, "份", IMG.lotus),
+            mkPortion("薯条", "原切大薯条", 16, "份", IMG.fries),
+            mkPortion("洪湖藕条", "下酒", 16, "份", IMG.lotus),
             mkPortion("洪湖藕夹", "两片藕夹肉", 22, "份", IMG.lotus),
             mkPortion("鸡米花", "", 18, "份", IMG.chicken),
             mkPortion("小酥肉", "", 20, "份", IMG.chicken),
@@ -205,19 +205,19 @@
       sections:[
         { title:"窗台精酿啤酒（冰爽现打）", hint:"可选杯型：330ml / 500ml", groups:[
           { title:"基础畅饮", items:[
-            mkBeer("清爽拉格", specs(18,26), IMG.beer),
-            mkBeer("德式小麦", specs(20,28), IMG.beer),
+            mkBeer("清爽拉格", specs(14,18), IMG.beer),
+            mkBeer("德式小麦", specs(16,20), IMG.beer),
           ]},
           { title:"清爽果味", items:[
-            mkBeer("柠檬清饮", specs(20,28), IMG.beer),
-            mkBeer("车厘子微甜", specs(20,28), IMG.beer),
+            mkBeer("柠檬清饮", specs(18,22), IMG.beer),
+            mkBeer("车厘子微甜", specs(18,22), IMG.beer),
           ]},
           { title:"风味款", items:[
-            mkBeer("淡苦 IPA", specs(22,30), IMG.beer),
-            mkBeer("轻酸艾尔", specs(22,30), IMG.beer),
+            mkBeer("淡苦 IPA", specs(22,26), IMG.beer),
+            mkBeer("轻酸艾尔", specs(24,28), IMG.beer),
           ]},
           { title:"隐藏轮换", items:[
-            mkBeer("当月限定精酿", specs(24,32), IMG.beer, "隐藏轮换"),
+            mkBeer("当月限定精酿", specs(26,30), IMG.beer, "隐藏轮换"),
           ]},
         ]}
       ]
