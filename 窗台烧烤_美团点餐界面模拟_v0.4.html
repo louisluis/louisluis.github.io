@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>窗台烧烤｜美团点餐界面模拟 v0.4</title>
+  <style>
+    :root{
+      --bg:#f6f6f6;
+      --card:#ffffff;
+      --text:#111;
+      --sub:#777;
+      --line:#e9e9e9;
+      --accent:#ffcc33;
+      --accent2:#f6b400;
+      --cat:#f2f2f2;
+      --catActive:#ffffff;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",system-ui,Segoe UI,Roboto,Helvetica,Arial; background:var(--bg); color:var(--text);}
+    .phone{max-width:420px; margin:18px auto; background:var(--bg); border-radius:22px; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,.12); border:1px solid #eee;}
+    .top{background:#fff; padding:14px 14px 10px; position:sticky; top:0; z-index:5; border-bottom:1px solid var(--line);}
+    .titleRow{display:flex; align-items:center; gap:10px;}
+    .storeName{font-weight:900; font-size:18px; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+    .pill{font-size:12px; padding:6px 10px; background:#f7f7f7; border:1px solid var(--line); border-radius:999px; color:#333;}
+    .search{margin-top:10px; display:flex; align-items:center; gap:10px; background:#f5f5f5; border:1px solid var(--line); border-radius:999px; padding:10px 12px; color:#999; font-size:14px;}
+    .layout{display:flex; min-height:680px;}
+    .cats{width:105px; background:var(--cat); border-right:1px solid var(--line); overflow:auto;}
+    .cat{padding:14px 10px; font-size:13px; color:#444; cursor:pointer; border-left:3px solid transparent; line-height:1.2;}
+    .cat.active{background:var(--catActive); border-left-color:var(--accent2); font-weight:900;}
+    .list{flex:1; overflow:auto; padding:10px;}
+    .section{margin:10px 0 16px;}
+    .sectionHeader{display:flex; align-items:baseline; gap:8px; padding:6px 4px 2px;}
+    .sectionHeader h3{margin:0; font-size:15px;}
+    .sectionHeader span{font-size:12px; color:var(--sub);}
+    .hint{margin:6px 4px 10px; padding:10px 10px; border-radius:12px; border:1px solid rgba(246,180,0,.35); background:rgba(255,204,51,.18); color:#6a4b00; font-size:12px; line-height:1.35;}
+    .subgroup{margin:12px 4px 6px; font-size:12px; color:#666; display:flex; align-items:center; gap:8px;}
+    .subgroup:before{content:""; width:10px;height:10px;border-radius:4px; background:#fff; border:1px solid var(--line);}
+    .item{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:10px; display:flex; gap:10px; align-items:center; margin:8px 0;}
+    .thumb{width:78px; height:78px; border-radius:12px; object-fit:cover; flex:0 0 78px; background:#f0f0f0;}
+    .meta{flex:1; min-width:0}
+    .name{font-weight:900; font-size:15px; margin:0; line-height:1.2;}
+    .tag{margin-top:4px; font-size:12px; color:#555; display:flex; gap:6px; flex-wrap:wrap; align-items:center;}
+    .tag .flag{display:inline-flex; align-items:center; gap:4px; padding:2px 6px; border-radius:6px; background:rgba(255,204,51,.25); border:1px solid rgba(246,180,0,.35); color:#6a4b00; font-weight:900;}
+    .sub{margin-top:6px; font-size:12px; color:var(--sub); line-height:1.25;}
+    .act{display:flex; flex-direction:column; align-items:flex-end; gap:8px; flex:0 0 auto;}
+    .price{font-weight:1000;}
+    .unit{font-size:12px;color:#777;font-weight:800}
+    .ctrl{display:flex; align-items:center; gap:8px;}
+    .btnRound{width:34px; height:34px; border-radius:999px; border:1px solid var(--line); background:#fff; cursor:pointer; font-size:18px; line-height:34px; text-align:center;}
+    .btnAdd{background:var(--accent); border:1px solid rgba(246,180,0,.55); box-shadow:0 8px 18px rgba(246,180,0,.18); font-weight:1000;}
+    .qty{min-width:18px; text-align:center; font-weight:1000; font-size:13px;}
+    .btnSpec{padding:8px 10px; border-radius:999px; border:1px solid rgba(246,180,0,.6); background:rgba(255,204,51,.22); cursor:pointer; font-size:12px; color:#6a4b00; font-weight:1000;}
+    .footerBar{position:sticky; bottom:0; z-index:6; background:#fff; border-top:1px solid var(--line); display:flex; align-items:center; padding:10px 12px; gap:10px;}
+    .cart{flex:1; background:#f7f7f7; border:1px solid var(--line); border-radius:999px; padding:10px 12px; font-size:13px; color:#444; display:flex; align-items:center; justify-content:space-between;}
+    .checkout{padding:10px 14px; border-radius:999px; border:none; background:var(--accent); font-weight:1000; cursor:pointer;}
+
+    /* 规格弹层 */
+    .modalMask{position:fixed; inset:0; background:rgba(0,0,0,.35); display:none; align-items:flex-end; justify-content:center; padding:12px; z-index:10;}
+    .modal{width:min(420px, 100%); background:#fff; border-radius:18px; overflow:hidden; border:1px solid rgba(255,255,255,.4);}
+    .modalHeader{padding:14px 14px 8px; border-bottom:1px solid var(--line);}
+    .modalHeader .mTitle{font-weight:1000; font-size:16px;}
+    .modalBody{padding:12px 14px;}
+    .specRow{display:flex; gap:10px; flex-wrap:wrap;}
+    .chip{padding:10px 12px; border-radius:12px; border:1px solid var(--line); background:#fafafa; cursor:pointer; font-weight:1000; font-size:13px; display:flex; align-items:center; gap:8px;}
+    .chip.active{border-color:var(--accent2); background:rgba(255,204,51,.20);}
+    .modalFooter{padding:12px 14px; border-top:1px solid var(--line); display:flex; gap:10px; align-items:center; justify-content:space-between;}
+    .mPrice{font-weight:1100; font-size:18px;}
+    .mAdd{flex:0 0 auto; padding:10px 14px; border-radius:999px; border:none; background:var(--accent); font-weight:1100; cursor:pointer;}
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <div class="top">
+      <div class="titleRow">
+        <div class="storeName">窗台烧烤（验证店）</div>
+        <div class="pill">扫码点餐</div>
+      </div>
+      <div class="search">🔎 请输入菜品名称（演示）</div>
+    </div>
+
+    <div class="layout">
+      <div class="cats" id="cats"></div>
+      <div class="list" id="list"></div>
+    </div>
+
+    <div class="footerBar">
+      <div class="cart">
+        <span>🧺 已选 <b id="cartCount">0</b> 件</span>
+        <span>合计：¥ <b id="cartTotal">0</b></span>
+      </div>
+      <button class="checkout" onclick="alert('模拟页面：这里会进入提交订单')">去下单</button>
+    </div>
+  </div>
+
+  <!-- 规格弹层 -->
+  <div class="modalMask" id="modalMask" onclick="closeModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modalHeader">
+        <div class="mTitle" id="mTitle">选择规格</div>
+      </div>
+      <div class="modalBody">
+        <div style="font-size:12px;color:#777;margin-bottom:8px;">杯型</div>
+        <div class="specRow" id="specRow"></div>
+      </div>
+      <div class="modalFooter">
+        <div class="mPrice">¥ <span id="mPrice">0</span></div>
+        <button class="mAdd" id="mAdd">加入购物车</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // 图片：演示用（后续替换成自家实拍更真实）
+  const IMG = {
+    beef:   "https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=480&q=60",
+    lamb:   "https://images.unsplash.com/photo-1604908176997-125f25cc5000?auto=format&fit=crop&w=480&q=60",
+    chicken:"https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?auto=format&fit=crop&w=480&q=60",
+    pork:   "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=480&q=60",
+    fish:   "https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=480&q=60",
+    veg:    "https://images.unsplash.com/photo-1543353071-873f17a7a088?auto=format&fit=crop&w=480&q=60",
+    cold:   "https://images.unsplash.com/photo-1551892374-ecf8754cf8b0?auto=format&fit=crop&w=480&q=60",
+    fries:  "https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=480&q=60",
+    lotus:  "https://images.unsplash.com/photo-1625938144755-65236f0a1d55?auto=format&fit=crop&w=480&q=60",
+    bread:  "https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?auto=format&fit=crop&w=480&q=60",
+    ice:    "https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?auto=format&fit=crop&w=480&q=60",
+    beer:   "https://images.unsplash.com/photo-1555658636-6e4a36218be7?auto=format&fit=crop&w=480&q=60",
+    soda:   "https://images.unsplash.com/photo-1544145945-f9042ae2c8a4?auto=format&fit=crop&w=480&q=60",
+    water:  "https://images.unsplash.com/photo-1528825871115-3581a5387919?auto=format&fit=crop&w=480&q=60",
+    tea:    "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&w=480&q=60",
+    ginger: "https://images.unsplash.com/photo-1542444459-db47a6f2011b?auto=format&fit=crop&w=480&q=60",
+  };
+
+  // 左侧五大类（不加标签/副标题）
+  const menu = [
+    { id:"combo", name:"推荐套餐",
+      sections:[
+        { title:"推荐套餐", hint:"（本页演示不展开）", groups:[
+          { title:"入口保留", items:[
+            { id:"combo_tbd", name:"套餐开发中", tag:"等你把套餐逻辑锁死再补", img:IMG.beer, kind:"info", price:0, unit:"" }
+          ]}
+        ]}
+      ]
+    },
+    { id:"skewers", name:"烤串",
+      sections:[
+        { title:"烤串", hint:"肉串：3串起点。价格按单串显示。", groups:[
+          { title:"牛肉", items:[
+            mkMeat("鲜牛肉串", "原切，偏瘦", 6, IMG.beef),
+            mkMeat("牛肋条串", "肥瘦相间", 7, IMG.beef),
+          ]},
+          { title:"羊肉", items:[
+            mkMeat("内蒙古鲜羊肉串", "羊味轻", 7, IMG.lamb),
+            mkMeat("羊排肉串", "肥瘦相间", 8, IMG.lamb),
+          ]},
+          { title:"鸡肉", items:[
+            mkMeat("鸡中翅", "常规口味", 6, IMG.chicken),
+            mkMeat("鸡腿肉串", "偏嫩", 6, IMG.chicken),
+            mkMeat("掌中宝", "脆口", 7, IMG.chicken),
+          ]},
+          { title:"猪肉", items:[
+            mkMeat("猪肉筋串", "武汉特色", 6, IMG.pork),
+            mkMeat("原切香辣五花肉串", "原切，大块", 7, IMG.pork),
+            mkMeat("猪颈肉串", "嫩", 8, IMG.pork),
+          ]},
+          { title:"鱼", items:[
+            mkMeat("香辣财鱼片", "武汉特色", 6, "串", IMG.fish),
+          ]},
+          { title:"素烤（按份）", items:[
+            mkPortion("烤土豆片", "切片烤", 12, "份", IMG.veg),
+            mkPortion("烤西葫芦", "切片烤", 12, "份", IMG.veg),
+            mkPortion("烤青椒", "香辣", 12, "份", IMG.veg),
+            mkPortion("烤茄子", "蒜香", 14, "份", IMG.veg),
+          ]},
+          { title:"烤制碳水小食（按份）", items:[
+            mkPortion("烤吐司", "甜口", 10, "份", IMG.bread),
+            mkPortion("烤馒头片", "外酥里软", 10, "份", IMG.bread),
+          ]},
+        ]}
+      ]
+    },
+    { id:"snack", name:"凉菜 & 小食",
+      sections:[
+        { title:"凉菜 & 小食", hint:"不一定现在点，吃着看要不要加", groups:[
+          { title:"凉菜", items:[
+            mkPortion("拍黄瓜", "", 10, "份", IMG.cold),
+            mkPortion("花生米", "", 10, "份", IMG.cold),
+            mkPortion("洪湖凉拌藕带", "酸脆", 16, "份", IMG.lotus),
+          ]},
+          { title:"炸物小食", items:[
+            mkPortion("薯条", "原切大薯条", 18, "份", IMG.fries),
+            mkPortion("洪湖藕条", "下酒", 18, "份", IMG.lotus),
+            mkPortion("洪湖藕夹", "两片藕夹肉", 22, "份", IMG.lotus),
+            mkPortion("鸡米花", "", 18, "份", IMG.chicken),
+            mkPortion("小酥肉", "", 20, "份", IMG.chicken),
+          ]},
+          { title:"收尾", items:[
+            mkPortion("香草冰激凌（八喜）", "收尾", 12, "份", IMG.ice),
+            mkPortion("巧克力冰激凌（八喜）", "收尾", 12, "份", IMG.ice),
+          ]},
+        ]}
+      ]
+    },
+    { id:"beer", name:"精酿啤酒",
+      sections:[
+        { title:"窗台精酿啤酒（冰爽现打）", hint:"可选杯型：330ml / 500ml", groups:[
+          { title:"基础畅饮", items:[
+            mkBeer("清爽拉格", specs(18,26), IMG.beer),
+            mkBeer("德式小麦", specs(20,28), IMG.beer),
+          ]},
+          { title:"清爽果味", items:[
+            mkBeer("柠檬清饮", specs(20,28), IMG.beer),
+            mkBeer("车厘子微甜", specs(20,28), IMG.beer),
+          ]},
+          { title:"风味款", items:[
+            mkBeer("淡苦 IPA", specs(22,30), IMG.beer),
+            mkBeer("轻酸艾尔", specs(22,30), IMG.beer),
+          ]},
+          { title:"隐藏轮换", items:[
+            mkBeer("当月限定精酿", specs(24,32), IMG.beer, "隐藏轮换"),
+          ]},
+        ]}
+      ]
+    },
+    { id:"na", name:"无酒精饮料",
+      sections:[
+        { title:"无酒精 · 不将就", hint:"不喝酒也不将就", groups:[
+          { title:"0.0% / 无醇", items:[
+            mkPortion("无醇精酿啤酒（0.0%）", "", 18, "瓶", IMG.beer),
+          ]},
+          { title:"无酒精饮品", items:[
+            mkPortion("无糖气泡水", "", 6, "瓶", IMG.water),
+            mkPortion("零糖可乐", "", 6, "罐", IMG.soda),
+            mkPortion("零糖雪碧", "", 6, "罐", IMG.soda),
+            mkPortion("冷泡茶（无糖）", "", 8, "杯", IMG.tea),
+            mkPortion("姜汁汽水", "", 8, "瓶", IMG.ginger),
+          ]},
+        ]}
+      ]
+    },
+  ];
+
+  function uid(prefix, name){ return prefix + "_" + name.replace(/[（）()·\s]/g,"_").slice(0,50); }
+  function mkMeat(name, tag, pricePerSkewer, img){ return { id:uid("meat", name), kind:"meat", name, tag, price:pricePerSkewer, unit:"串", img }; }
+  function mkPortion(name, tag, price, unit, img){ return { id:uid("p", name), kind:"portion", name, tag, price, unit, img }; }
+  function mkBeer(name, specs, img, tag=""){ return { id:uid("beer", name), kind:"beer", name, tag, specs, img }; }
+  function specs(small, big){ return [{label:"小杯 330ml", price:small},{label:"大杯 500ml", price:big}]; }
+
+  let activeCat = menu[0].id;
+  const cart = new Map();    // key -> {qty,total}
+  const qtyMap = new Map();  // itemId or key -> qty
+
+  const catsEl = document.getElementById("cats");
+  const listEl = document.getElementById("list");
+  const cartCountEl = document.getElementById("cartCount");
+  const cartTotalEl = document.getElementById("cartTotal");
+
+  function money(n){ return (Math.round(n*100)/100).toFixed(0); }
+
+  function renderCats(){
+    catsEl.innerHTML = "";
+    menu.forEach(c=>{
+      const d = document.createElement("div");
+      d.className = "cat" + (c.id===activeCat ? " active":"");
+      d.textContent = c.name;
+      d.onclick = ()=>{ activeCat = c.id; render(); };
+      catsEl.appendChild(d);
+    });
+  }
+
+  function renderList(){
+    listEl.innerHTML = "";
+    const cat = menu.find(c=>c.id===activeCat);
+    if(!cat) return;
+
+    cat.sections.forEach(sec=>{
+      const secEl = document.createElement("div");
+      secEl.className = "section";
+      secEl.innerHTML = `
+        <div class="sectionHeader">
+          <h3>${sec.title}</h3>
+        </div>
+        ${sec.hint ? `<div class="hint">${sec.hint}</div>`:""}
+      `;
+
+      sec.groups.forEach(g=>{
+        const sg = document.createElement("div");
+        sg.className = "subgroup";
+        sg.textContent = g.title;
+        secEl.appendChild(sg);
+
+        g.items.forEach(item=>{
+          secEl.appendChild(renderItem(item));
+        });
+      });
+
+      listEl.appendChild(secEl);
+    });
+  }
+
+  function renderItem(item){
+    const el = document.createElement("div");
+    el.className = "item";
+
+    const tagHtml = item.tag ? `<span class="flag">🔥</span>${item.tag}` : "";
+
+    let subline = "";
+    let priceHtml = "";
+    let actionHtml = "";
+
+    const qty = qtyMap.get(item.id) || 0;
+
+    if(item.kind==="meat"){
+      priceHtml = `¥ ${money(item.price)} <span class="unit">/串</span>`;
+      subline = ``;
+      actionHtml = `
+        <div class="ctrl">
+          <button class="btnRound" data-act="minus">−</button>
+          <div class="qty">${qty}</div>
+          <button class="btnRound btnAdd" data-act="plus">+</button>
+        </div>
+      `;
+    }else if(item.kind==="portion"){
+      priceHtml = `¥ ${money(item.price)} <span class="unit">/${item.unit}</span>`;
+      actionHtml = `
+        <div class="ctrl">
+          <button class="btnRound" data-act="minus">−</button>
+          <div class="qty">${qty}</div>
+          <button class="btnRound btnAdd" data-act="plus">+</button>
+        </div>
+      `;
+    }else if(item.kind==="beer"){
+      priceHtml = `¥ ${money(item.specs[0].price)} <span class="unit">起</span>`;
+      subline = `可选杯型：330ml / 500ml`;
+      actionHtml = `<button class="btnSpec" data-act="spec">选规格</button>`;
+    }else{
+      priceHtml = `—`;
+      actionHtml = `<button class="btnSpec" data-act="info">查看</button>`;
+    }
+
+    el.innerHTML = `
+      <img class="thumb" src="${item.img}" alt="">
+      <div class="meta">
+        <p class="name">${item.name}</p>
+        <div class="tag">${tagHtml}</div>
+        <div class="sub">${subline}</div>
+      </div>
+      <div class="act">
+        <div class="price">${priceHtml}</div>
+        ${actionHtml}
+      </div>
+    `;
+
+    if(item.kind==="beer"){
+      el.querySelector("[data-act='spec']").onclick = ()=> openSpecModal(item);
+    }else if(item.kind==="info"){
+      el.querySelector("[data-act='info']").onclick = ()=> alert("模拟：这里留给你补套餐内容");
+    }else{
+      el.querySelector("[data-act='plus']").onclick = ()=> addItem(item);
+      el.querySelector("[data-act='minus']").onclick = ()=> removeItem(item);
+    }
+    return el;
+  }
+
+  function addItem(item){
+    let qty = qtyMap.get(item.id) || 0;
+    let addQty = 1;
+    let addPrice = 0;
+
+    if(item.kind==="meat"){
+      addQty = (qty===0) ? 3 : 1;
+      addPrice = addQty * item.price;
+    }else if(item.kind==="portion"){
+      addQty = 1;
+      addPrice = item.price;
+    }
+
+    qty += addQty;
+    qtyMap.set(item.id, qty);
+
+    const prev = cart.get(item.id) || {qty:0, total:0};
+    cart.set(item.id, {qty: qty, total: prev.total + addPrice});
+    updateCart();
+    render();
+  }
+
+  function removeItem(item){
+    let qty = qtyMap.get(item.id) || 0;
+    if(qty<=0) return;
+
+    let decQty = 1;
+    let decPrice = 0;
+
+    if(item.kind==="meat"){
+      decQty = 1;
+      decPrice = item.price;
+    }else if(item.kind==="portion"){
+      decQty = 1;
+      decPrice = item.price;
+    }
+
+    qty = Math.max(0, qty - decQty);
+    qtyMap.set(item.id, qty);
+
+    const prev = cart.get(item.id) || {qty:0, total:0};
+    const nextTotal = Math.max(0, prev.total - decPrice);
+    if(qty===0) cart.delete(item.id);
+    else cart.set(item.id, {qty: qty, total: nextTotal});
+
+    updateCart();
+    render();
+  }
+
+  function updateCart(){
+    let totalCount = 0;
+    let totalPrice = 0;
+    for(const [id, v] of cart.entries()){
+      totalCount += v.qty;
+      totalPrice += v.total;
+    }
+    cartCountEl.textContent = totalCount;
+    cartTotalEl.textContent = money(totalPrice);
+  }
+
+  // Beer spec modal
+  const modalMask = document.getElementById("modalMask");
+  const specRow = document.getElementById("specRow");
+  const mTitle = document.getElementById("mTitle");
+  const mPrice = document.getElementById("mPrice");
+  const mAdd = document.getElementById("mAdd");
+
+  let currentBeer = null;
+  let currentSpecIndex = 0;
+
+  function openSpecModal(item){
+    currentBeer = item;
+    currentSpecIndex = 0;
+    mTitle.textContent = item.name;
+    specRow.innerHTML = "";
+
+    item.specs.forEach((s,idx)=>{
+      const chip = document.createElement("div");
+      chip.className = "chip" + (idx===0 ? " active":"");
+      chip.innerHTML = `<span>${s.label}</span><span style="color:#777;font-weight:1000">¥${money(s.price)}</span>`;
+      chip.onclick = ()=>{
+        currentSpecIndex = idx;
+        [...specRow.children].forEach(n=>n.classList.remove("active"));
+        chip.classList.add("active");
+        mPrice.textContent = money(item.specs[idx].price);
+      };
+      specRow.appendChild(chip);
+    });
+
+    mPrice.textContent = money(item.specs[0].price);
+    mAdd.onclick = ()=>{ addBeerToCart(item, item.specs[currentSpecIndex]); modalMask.style.display="none"; };
+    modalMask.style.display = "flex";
+  }
+
+  function addBeerToCart(item, spec){
+    const key = item.id + "::" + spec.label;
+    const prevQty = qtyMap.get(key) || 0;
+    qtyMap.set(key, prevQty + 1);
+
+    const prev = cart.get(key) || {qty:0, total:0};
+    cart.set(key, {qty: prevQty + 1, total: prev.total + spec.price});
+    updateCart();
+  }
+
+  function closeModal(e){ modalMask.style.display = "none"; }
+
+  function render(){ renderCats(); renderList(); }
+  render();
+</script>
+</body>
+</html>
