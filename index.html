@@ -7,13 +7,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #f7f7f7;
+            --bg-color: #f9f9fb; /* 更柔和的背景灰 */
             --surface-color: #ffffff;
-            --text-primary: #1a1a1a;
-            --text-secondary: #666666;
-            --accent-color: #d35400; /* 烤肉与精酿的焦糖色点缀 */
-            --border-color: #eaeaea;
-            --nav-height: 60px;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --brand-color: #c85a17; /* 烧烤/精酿质感的深琥珀色 */
+            --brand-light: #fef5f0; /* 图标背景色 */
+            --nav-height: 64px;
+            --radius-card: 16px;
         }
 
         * {
@@ -24,187 +25,197 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-primary);
-            line-height: 1.6;
-            padding-top: var(--nav-height); /* 为固定导航栏留出空间 */
+            padding-top: var(--nav-height);
+            padding-bottom: 40px;
         }
 
-        /* 顶部悬浮分类导航 */
+        /* 顶部悬浮导航 - 增加毛玻璃效果 */
         .category-nav {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: var(--nav-height);
-            background-color: var(--surface-color);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
             z-index: 1000;
             display: flex;
             overflow-x: auto;
             scroll-behavior: smooth;
-            /* 隐藏滚动条 */
-            -ms-overflow-style: none;
             scrollbar-width: none;
         }
-        .category-nav::-webkit-scrollbar {
-            display: none;
-        }
+        .category-nav::-webkit-scrollbar { display: none; }
 
         .nav-item {
             flex: 0 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
             height: 100%;
             display: flex;
             align-items: center;
             font-size: 15px;
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text-secondary);
             text-decoration: none;
-            border-bottom: 2px solid transparent;
-            transition: all 0.3s ease;
+            transition: color 0.3s ease;
+            position: relative;
         }
 
         .nav-item.active {
-            color: var(--accent-color);
-            border-bottom: 2px solid var(--accent-color);
+            color: var(--brand-color);
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            background-color: var(--brand-color);
+            border-radius: 3px 3px 0 0;
         }
 
         /* 主体内容区 */
         .menu-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 24px 20px;
         }
 
         .category-section {
-            margin-bottom: 40px;
-            scroll-margin-top: calc(var(--nav-height) + 20px); /* 锚点跳转偏移量 */
+            margin-bottom: 48px;
+            scroll-margin-top: calc(var(--nav-height) + 24px);
         }
 
         .category-header {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 24px;
         }
 
         .category-header i {
-            font-size: 20px;
-            color: var(--text-secondary);
-            margin-right: 10px;
+            font-size: 24px;
+            color: var(--brand-color);
+            margin-right: 12px;
         }
 
         .category-header h2 {
-            font-size: 20px;
-            font-weight: 600;
-            letter-spacing: 1px;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
-        /* 菜品网格布局 */
+        /* 呼吸感卡片网格布局 */
         .items-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
+            grid-template-columns: repeat(2, 1fr); /* 手机端双列卡片，避免密集列表 */
+            gap: 16px;
         }
 
-        /* 响应式断点 */
-        @media (min-width: 600px) {
-            .items-grid { grid-template-columns: repeat(2, 1fr); }
+        @media (min-width: 768px) {
+            .items-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
         }
         @media (min-width: 1024px) {
-            .items-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+            .items-grid { grid-template-columns: repeat(4, 1fr); gap: 32px; }
         }
 
-        /* 单个菜品卡片 */
+        /* 独立菜品卡片 */
         .item-card {
             background-color: var(--surface-color);
-            border-radius: 8px;
-            padding: 16px 20px;
+            border-radius: var(--radius-card);
+            padding: 24px 16px;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-            border: 1px solid var(--border-color);
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .item-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        .item-card:active {
+            transform: scale(0.98);
         }
 
-        .item-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .item-icon {
-            width: 32px;
-            height: 32px;
+        /* 核心视觉：强化的矢量图标容器 */
+        .item-icon-wrapper {
+            width: 64px;
+            height: 64px;
             border-radius: 50%;
-            background-color: var(--bg-color);
+            background-color: var(--brand-light);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-secondary);
-            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .item-icon-wrapper i {
+            font-size: 28px;
+            color: var(--brand-color);
         }
 
         .item-name {
-            font-size: 16px;
-            font-weight: 500;
+            font-size: 15px;
+            font-weight: 600;
             color: var(--text-primary);
+            margin-bottom: 8px;
+            line-height: 1.3;
+            /* 超过两行省略号 */
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .item-price {
             font-size: 18px;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--text-primary);
+            margin-top: auto; /* 价格始终对齐底部 */
         }
 
         .item-price::before {
             content: "¥";
-            font-size: 14px;
+            font-size: 13px;
             margin-right: 2px;
             color: var(--text-secondary);
+            font-weight: 500;
         }
 
-        /* 页脚 */
+        /* 底部留白与品牌露出版 */
         footer {
             text-align: center;
-            padding: 40px 0;
+            padding: 20px 0 40px;
             color: var(--text-secondary);
             font-size: 12px;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            font-weight: 500;
+            opacity: 0.6;
         }
     </style>
 </head>
 <body>
 
     <nav class="category-nav" id="nav-container"></nav>
-
     <main class="menu-container" id="menu-container"></main>
 
     <footer>
-        WINDOW SILL BBQ · 窗台烧烤
+        WINDOW SILL BBQ
     </footer>
 
     <script>
-        /**
-         * 核心数据中心：日常维护只需修改这个数组
-         * 增加菜品：在对应的 items 数组中添加 { name: '新菜名', price: 价格 }
-         * 增加分类：在数组中添加新的分类对象
-         */
+        // 数据结构保持不变，仅针对不同品类分配了更精准的矢量符号组合
         const menuData = [
             {
                 id: 'meat',
                 category: '烤肉串',
-                icon: 'fa-solid fa-fire-burner', // 抽象符号配置
-                itemIcon: 'fa-solid fa-skewers',
+                icon: 'fa-solid fa-fire', 
+                itemIcon: 'fa-solid fa-bacon', // 培根/肉类意向矢量
                 items: [
                     { name: '蒜香鲜牛肉串', price: 4 },
                     { name: '原切牛肋条串', price: 8 },
@@ -218,30 +229,30 @@
                     { name: '猪肉筋串', price: 2 },
                     { name: '猪脆骨串', price: 3 },
                     { name: '腊肠小串', price: 10 },
-                    { name: '烤鱿鱼须', price: 18 },
-                    { name: '烤鱿鱼板', price: 10 },
+                    { name: '烤鱿鱼须', price: 18, specificIcon: 'fa-solid fa-water' }, // 个别特殊菜品可单独指定图标
+                    { name: '烤鱿鱼板', price: 10, specificIcon: 'fa-solid fa-water' },
                     { name: '鸭肠小串', price: 10 },
-                    { name: '烤虾', price: 4 },
-                    { name: '烤小黄鱼', price: 4 }
+                    { name: '烤虾', price: 4, specificIcon: 'fa-solid fa-shrimp' },
+                    { name: '烤小黄鱼', price: 4, specificIcon: 'fa-solid fa-fish' }
                 ]
             },
             {
                 id: 'veg',
                 category: '素烤',
                 icon: 'fa-solid fa-leaf',
-                itemIcon: 'fa-solid fa-seedling',
+                itemIcon: 'fa-solid fa-carrot', // 蔬菜意向矢量
                 items: [
-                    { name: '烤面筋', price: 2 },
+                    { name: '烤面筋', price: 2, specificIcon: 'fa-solid fa-wheat-awn' },
                     { name: '烤土豆片', price: 8 },
                     { name: '烤西葫芦', price: 2 },
                     { name: '烤韭菜', price: 8 },
                     { name: '烤茄子', price: 16 },
                     { name: '烤香菇', price: 10 },
-                    { name: '烤甜玉米粒', price: 8 },
+                    { name: '烤甜玉米粒', price: 8, specificIcon: 'fa-solid fa-corn' },
                     { name: '烤素鸡', price: 8 },
                     { name: '烤苕皮', price: 8 },
                     { name: '烤奶香小馒头', price: 6 },
-                    { name: '烤芝士面包', price: 7 },
+                    { name: '烤芝士面包', price: 7, specificIcon: 'fa-solid fa-bread-slice' },
                     { name: '烤河粉', price: 12 },
                     { name: '芝士焗榴莲', price: 25 },
                     { name: '芝士焗红薯', price: 18 },
@@ -252,7 +263,7 @@
                 id: 'fried',
                 category: '炸物/小食',
                 icon: 'fa-solid fa-utensils',
-                itemIcon: 'fa-solid fa-bowl-food',
+                itemIcon: 'fa-solid fa-cookie',
                 items: [
                     { name: '炸藕条', price: 16 },
                     { name: '小酥肉', price: 25 },
@@ -263,7 +274,7 @@
                 id: 'cold',
                 category: '凉菜',
                 icon: 'fa-solid fa-snowflake',
-                itemIcon: 'fa-solid fa-carrot',
+                itemIcon: 'fa-solid fa-bowl-rice',
                 items: [
                     { name: '毛豆', price: 10 },
                     { name: '花生', price: 10 },
@@ -275,7 +286,7 @@
                 id: 'beer',
                 category: '啤酒',
                 icon: 'fa-solid fa-beer-mug-empty',
-                itemIcon: 'fa-solid fa-wheat-awn',
+                itemIcon: 'fa-solid fa-glass-water',
                 items: [
                     { name: '比利时小麦', price: 18 },
                     { name: '德式小麦', price: 18 },
@@ -287,17 +298,16 @@
                 id: 'drink',
                 category: '饮料',
                 icon: 'fa-solid fa-bottle-water',
-                itemIcon: 'fa-solid fa-glass-water',
+                itemIcon: 'fa-solid fa-mug-hot',
                 items: [
-                    { name: '可乐', price: 5 },
-                    { name: '雪碧', price: 5 },
-                    { name: '茉莉花茶', price: 10 },
-                    { name: '矿泉水', price: 3 }
+                    { name: '可乐', price: 5, specificIcon: 'fa-solid fa-bottle-droplet' },
+                    { name: '雪碧', price: 5, specificIcon: 'fa-solid fa-bottle-droplet' },
+                    { name: '茉莉花茶', price: 10, specificIcon: 'fa-solid fa-leaf' },
+                    { name: '矿泉水', price: 3, specificIcon: 'fa-solid fa-bottle-water' }
                 ]
             }
         ];
 
-        // 引擎渲染逻辑：自动将数据转换为网页HTML
         document.addEventListener('DOMContentLoaded', () => {
             const navContainer = document.getElementById('nav-container');
             const menuContainer = document.getElementById('menu-container');
@@ -306,19 +316,20 @@
             let menuHTML = '';
 
             menuData.forEach((cat, index) => {
-                // 1. 生成导航栏
                 navHTML += `<a href="#${cat.id}" class="nav-item ${index === 0 ? 'active' : ''}" data-target="${cat.id}">${cat.category}</a>`;
 
-                // 2. 生成菜品区域
-                let itemsHTML = cat.items.map(item => `
+                let itemsHTML = cat.items.map(item => {
+                    // 如果单品有特定图标则用特定图标，否则用分类通用图标
+                    const finalIcon = item.specificIcon ? item.specificIcon : cat.itemIcon;
+                    return `
                     <div class="item-card">
-                        <div class="item-info">
-                            <div class="item-icon"><i class="${cat.itemIcon}"></i></div>
-                            <div class="item-name">${item.name}</div>
+                        <div class="item-icon-wrapper">
+                            <i class="${finalIcon}"></i>
                         </div>
+                        <div class="item-name">${item.name}</div>
                         <div class="item-price">${item.price}</div>
                     </div>
-                `).join('');
+                `}).join('');
 
                 menuHTML += `
                     <section id="${cat.id}" class="category-section">
@@ -336,7 +347,6 @@
             navContainer.innerHTML = navHTML;
             menuContainer.innerHTML = menuHTML;
 
-            // 滚动监听逻辑：滚动页面时，顶部导航栏自动高亮当前分类
             const sections = document.querySelectorAll('.category-section');
             const navItems = document.querySelectorAll('.nav-item');
 
@@ -344,9 +354,7 @@
                 let current = '';
                 sections.forEach(section => {
                     const sectionTop = section.offsetTop;
-                    const sectionHeight = section.clientHeight;
-                    // 动态计算当前视图所属分类
-                    if (pageYOffset >= (sectionTop - 100)) {
+                    if (pageYOffset >= (sectionTop - 150)) {
                         current = section.getAttribute('id');
                     }
                 });
@@ -355,14 +363,12 @@
                     item.classList.remove('active');
                     if (item.getAttribute('data-target') === current) {
                         item.classList.add('active');
-                        // 导航栏跟随滚动保持可见
                         const navCenter = item.offsetLeft - (navContainer.offsetWidth / 2) + (item.offsetWidth / 2);
                         navContainer.scrollTo({ left: navCenter, behavior: 'smooth' });
                     }
                 });
             });
             
-            // 点击导航平滑滚动处理
             navItems.forEach(item => {
                 item.addEventListener('click', function(e) {
                     e.preventDefault();
