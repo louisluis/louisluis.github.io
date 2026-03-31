@@ -1,386 +1,737 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>窗台烧烤 - 菜单</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --bg-color: #f9f9fb; /* 更柔和的背景灰 */
-            --surface-color: #ffffff;
-            --text-primary: #1d1d1f;
-            --text-secondary: #86868b;
-            --brand-color: #c85a17; /* 烧烤/精酿质感的深琥珀色 */
-            --brand-light: #fef5f0; /* 图标背景色 */
-            --nav-height: 64px;
-            --radius-card: 16px;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>窗台烧烤｜菜单</title>
+  <style>
+    :root{
+      --bg: #f5f1eb;
+      --bg-2: #f8f5f0;
+      --panel: rgba(255,255,255,.90);
+      --panel-strong: rgba(255,255,255,.98);
+      --text: #2c2824;
+      --muted: #85796f;
+      --line: rgba(82,66,53,.10);
+      --line-strong: rgba(82,66,53,.18);
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
+      --brand: #6b5c4f;
+      --brand-soft: rgba(107,92,79,.08);
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            padding-top: var(--nav-height);
-            padding-bottom: 40px;
-        }
+      --warm: #8b5e46;
+      --warm-soft: rgba(139,94,70,.10);
+      --warm-strong: #7b4e36;
 
-        /* 顶部悬浮导航 - 增加毛玻璃效果 */
-        .category-nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: var(--nav-height);
-            background-color: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            z-index: 1000;
-            display: flex;
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            scrollbar-width: none;
-        }
-        .category-nav::-webkit-scrollbar { display: none; }
+      --accent: #b76a43;
+      --accent-soft: rgba(183,106,67,.12);
 
-        .nav-item {
-            flex: 0 0 auto;
-            padding: 0 24px;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: color 0.3s ease;
-            position: relative;
-        }
+      --price: #583f33;
+      --shadow-soft: 0 6px 18px rgba(58,44,33,.04);
+      --shadow: 0 16px 40px rgba(58,44,33,.06);
 
-        .nav-item.active {
-            color: var(--brand-color);
-        }
+      --content-width: 1180px;
+    }
 
-        .nav-item.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 3px;
-            background-color: var(--brand-color);
-            border-radius: 3px 3px 0 0;
-        }
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
 
-        /* 主体内容区 */
-        .menu-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 24px 20px;
-        }
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",
+        "Hiragino Sans GB","Microsoft YaHei",sans-serif;
+      color:var(--text);
+      line-height:1.5;
+      background:
+        radial-gradient(circle at top left, rgba(139,94,70,.07), transparent 26%),
+        radial-gradient(circle at top right, rgba(107,92,79,.05), transparent 22%),
+        linear-gradient(180deg, var(--bg-2) 0%, var(--bg) 100%);
+    }
 
-        .category-section {
-            margin-bottom: 48px;
-            scroll-margin-top: calc(var(--nav-height) + 24px);
-        }
+    .page{
+      width:min(calc(100% - 48px), var(--content-width));
+      margin:0 auto;
+      padding:26px 0 72px;
+    }
 
-        .category-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 24px;
-        }
+    .hero{
+      position:relative;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at right bottom, rgba(183,106,67,.12), transparent 32%),
+        linear-gradient(135deg, rgba(255,255,255,.93), rgba(255,255,255,.78));
+      border:1px solid var(--line);
+      border-radius:32px;
+      box-shadow:var(--shadow);
+      padding:32px 30px 26px;
+      margin-bottom:20px;
+    }
 
-        .category-header i {
-            font-size: 24px;
-            color: var(--brand-color);
-            margin-right: 12px;
-        }
+    .hero::after{
+      content:"";
+      position:absolute;
+      right:-80px;
+      bottom:-80px;
+      width:280px;
+      height:280px;
+      background:radial-gradient(circle, rgba(183,106,67,.13), transparent 68%);
+      pointer-events:none;
+    }
 
-        .category-header h2 {
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:var(--warm-soft);
+      color:var(--warm-strong);
+      font-size:12px;
+      letter-spacing:.08em;
+      margin-bottom:14px;
+      border:1px solid rgba(139,94,70,.08);
+    }
 
-        /* 呼吸感卡片网格布局 */
-        .items-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 手机端双列卡片，避免密集列表 */
-            gap: 16px;
-        }
+    .dot{
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:var(--accent);
+      opacity:.95;
+      flex:0 0 auto;
+    }
 
-        @media (min-width: 768px) {
-            .items-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
-        }
-        @media (min-width: 1024px) {
-            .items-grid { grid-template-columns: repeat(4, 1fr); gap: 32px; }
-        }
+    h1{
+      margin:0;
+      font-size:clamp(32px, 4vw, 46px);
+      line-height:1.04;
+      letter-spacing:.02em;
+      font-weight:780;
+    }
 
-        /* 独立菜品卡片 */
-        .item-card {
-            background-color: var(--surface-color);
-            border-radius: var(--radius-card);
-            padding: 24px 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
+    .sub{
+      margin:14px 0 0;
+      color:var(--muted);
+      font-size:14px;
+      max-width:760px;
+    }
 
-        .item-card:active {
-            transform: scale(0.98);
-        }
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:20;
+      padding:14px 0 16px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background:linear-gradient(180deg, rgba(245,241,235,.94), rgba(245,241,235,.82) 78%, rgba(245,241,235,0));
+    }
 
-        /* 核心视觉：强化的矢量图标容器 */
-        .item-icon-wrapper {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background-color: var(--brand-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 16px;
-        }
+    .nav{
+      display:flex;
+      gap:12px;
+      overflow:auto;
+      padding:2px 2px 8px;
+      scrollbar-width:none;
+    }
 
-        .item-icon-wrapper i {
-            font-size: 28px;
-            color: var(--brand-color);
-        }
+    .nav::-webkit-scrollbar{ display:none; }
 
-        .item-name {
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 8px;
-            line-height: 1.3;
-            /* 超过两行省略号 */
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
+    .nav a{
+      flex:0 0 auto;
+      text-decoration:none;
+      color:var(--brand);
+      background:rgba(255,255,255,.84);
+      border:1px solid var(--line);
+      padding:12px 16px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:650;
+      box-shadow:var(--shadow-soft);
+      transition:.18s ease;
+    }
 
-        .item-price {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-top: auto; /* 价格始终对齐底部 */
-        }
+    .nav a:hover,
+    .nav a:focus-visible{
+      transform:translateY(-1px);
+      background:#fff;
+      border-color:rgba(139,94,70,.18);
+      color:var(--warm-strong);
+      outline:none;
+    }
 
-        .item-price::before {
-            content: "¥";
-            font-size: 13px;
-            margin-right: 2px;
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
+    .section{
+      scroll-margin-top:98px;
+      margin-top:64px;
+      padding-top:2px;
+    }
 
-        /* 底部留白与品牌露出版 */
-        footer {
-            text-align: center;
-            padding: 20px 0 40px;
-            color: var(--text-secondary);
-            font-size: 12px;
-            letter-spacing: 3px;
-            font-weight: 500;
-            opacity: 0.6;
-        }
-    </style>
+    .section:first-of-type{
+      margin-top:30px;
+    }
+
+    .section-head{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:14px;
+      margin-bottom:22px;
+      padding:0 2px;
+    }
+
+    .section-title-wrap{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      min-width:0;
+    }
+
+    .section-icon{
+      width:50px;
+      height:50px;
+      border-radius:17px;
+      background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.76));
+      border:1px solid rgba(139,94,70,.10);
+      display:grid;
+      place-items:center;
+      color:var(--warm-strong);
+      box-shadow:var(--shadow-soft);
+      flex:0 0 auto;
+    }
+
+    .section-title-block{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+
+    .section-title{
+      margin:0;
+      font-size:clamp(26px, 3vw, 36px);
+      line-height:1.1;
+      font-weight:790;
+      letter-spacing:.02em;
+    }
+
+    .section-desc{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .section-note{
+      color:var(--muted);
+      font-size:14px;
+      white-space:nowrap;
+      padding-bottom:5px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:18px;
+    }
+
+    .item{
+      position:relative;
+      display:flex;
+      align-items:center;
+      gap:15px;
+      min-height:112px;
+      padding:20px 20px;
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:22px;
+      box-shadow:var(--shadow-soft);
+      transition:.18s ease;
+    }
+
+    .item:hover{
+      transform:translateY(-1px);
+      background:var(--panel-strong);
+      border-color:rgba(139,94,70,.18);
+      box-shadow:0 14px 32px rgba(58,44,33,.06);
+    }
+
+    .item.recommended{
+      border-color: rgba(183,106,67,.20);
+      box-shadow:
+        0 14px 32px rgba(58,44,33,.05),
+        inset 0 1px 0 rgba(183,106,67,.08);
+    }
+
+    .item.recommended::before{
+      content:"";
+      position:absolute;
+      left:0;
+      top:16px;
+      bottom:16px;
+      width:4px;
+      border-radius:999px;
+      background:linear-gradient(180deg, #cf7d50, #9a5f40);
+      opacity:.95;
+    }
+
+    .icon{
+      width:54px;
+      height:54px;
+      border-radius:17px;
+      display:grid;
+      place-items:center;
+      flex:0 0 auto;
+      color:var(--warm-strong);
+      background:linear-gradient(180deg, rgba(183,106,67,.09), rgba(107,92,79,.04));
+      border:1px solid rgba(139,94,70,.10);
+    }
+
+    .meta{
+      min-width:0;
+      flex:1 1 auto;
+    }
+
+    .title-row{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      min-width:0;
+      flex-wrap:wrap;
+    }
+
+    .name{
+      font-size:19px;
+      font-weight:720;
+      letter-spacing:.01em;
+      color:var(--text);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width:100%;
+    }
+
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      height:24px;
+      padding:0 9px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.02em;
+      border:1px solid transparent;
+      white-space:nowrap;
+    }
+
+    .tag.recommend{
+      color:#8b4d2d;
+      background:rgba(207,125,80,.13);
+      border-color:rgba(207,125,80,.14);
+    }
+
+    .tag.signature{
+      color:#7a4b1c;
+      background:rgba(214,160,73,.16);
+      border-color:rgba(214,160,73,.14);
+    }
+
+    .tag.pairing{
+      color:#6f4f39;
+      background:rgba(129,102,79,.10);
+      border-color:rgba(129,102,79,.10);
+    }
+
+    .subline{
+      margin-top:8px;
+      color:var(--muted);
+      font-size:12px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .hint{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      color:var(--warm);
+      font-weight:600;
+    }
+
+    .price{
+      flex:0 0 auto;
+      margin-left:8px;
+      display:flex;
+      align-items:baseline;
+      gap:3px;
+      white-space:nowrap;
+      color:var(--price);
+      font-weight:800;
+    }
+
+    .price .unit{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:600;
+    }
+
+    .price .num{
+      font-size:31px;
+      line-height:1;
+      letter-spacing:-0.02em;
+    }
+
+    .price.hot .num{
+      color:var(--warm-strong);
+    }
+
+    .footer{
+      margin-top:52px;
+      padding-top:8px;
+      text-align:center;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    @media (max-width: 1080px){
+      .page{
+        width:min(calc(100% - 28px), var(--content-width));
+      }
+
+      .grid{
+        grid-template-columns:repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px){
+      .page{
+        width:min(calc(100% - 16px), var(--content-width));
+        padding:10px 0 48px;
+      }
+
+      .hero{
+        padding:18px 16px 15px;
+        border-radius:22px;
+        margin-bottom:12px;
+      }
+
+      .sub{
+        margin-top:10px;
+        font-size:13px;
+      }
+
+      .topbar{
+        padding:8px 0 10px;
+      }
+
+      .nav{
+        gap:10px;
+        padding-bottom:6px;
+      }
+
+      .nav a{
+        padding:10px 13px;
+        font-size:13px;
+      }
+
+      .section{
+        margin-top:34px;
+        scroll-margin-top:84px;
+      }
+
+      .section:first-of-type{
+        margin-top:18px;
+      }
+
+      .section-head{
+        align-items:center;
+        margin-bottom:12px;
+      }
+
+      .section-icon{
+        width:42px;
+        height:42px;
+        border-radius:14px;
+      }
+
+      .section-note{
+        font-size:12px;
+        padding-bottom:0;
+      }
+
+      .section-desc{
+        display:none;
+      }
+
+      .grid{
+        grid-template-columns:1fr;
+        gap:10px;
+      }
+
+      .item{
+        min-height:84px;
+        padding:12px;
+        border-radius:16px;
+      }
+
+      .item.recommended::before{
+        top:12px;
+        bottom:12px;
+      }
+
+      .icon{
+        width:42px;
+        height:42px;
+        border-radius:12px;
+      }
+
+      .name{
+        font-size:16px;
+      }
+
+      .tag{
+        height:22px;
+        padding:0 8px;
+        font-size:10px;
+      }
+
+      .subline{
+        margin-top:5px;
+      }
+
+      .price .num{
+        font-size:24px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="page">
+    <header class="hero">
+      <div class="eyebrow"><span class="dot"></span> 窗台烧烤｜静态菜单</div>
+      <h1>菜单</h1>
+      <p class="sub">烧烤、下酒、小食与晚间轻松时刻。分类可快速跳转，后期增删分类或菜品时只需要修改数据区。</p>
+    </header>
 
-    <nav class="category-nav" id="nav-container"></nav>
-    <main class="menu-container" id="menu-container"></main>
+    <div class="topbar">
+      <nav class="nav" id="categoryNav" aria-label="菜单分类导航"></nav>
+    </div>
 
-    <footer>
-        WINDOW SILL BBQ
-    </footer>
+    <main id="menuRoot"></main>
 
-    <script>
-        // 数据结构保持不变，仅针对不同品类分配了更精准的矢量符号组合
-        const menuData = [
-            {
-                id: 'meat',
-                category: '烤肉串',
-                icon: 'fa-solid fa-fire', 
-                itemIcon: 'fa-solid fa-bacon', // 培根/肉类意向矢量
-                items: [
-                    { name: '蒜香鲜牛肉串', price: 4 },
-                    { name: '原切牛肋条串', price: 8 },
-                    { name: '牛油串', price: 18 },
-                    { name: '鲜羊肉串', price: 4 },
-                    { name: '鸡中翅', price: 12 },
-                    { name: '掌中宝', price: 4 },
-                    { name: '烤卤鸡爪', price: 10 },
-                    { name: '酱香五花肉串', price: 3.3 },
-                    { name: '猪肉串', price: 2 },
-                    { name: '猪肉筋串', price: 2 },
-                    { name: '猪脆骨串', price: 3 },
-                    { name: '腊肠小串', price: 10 },
-                    { name: '烤鱿鱼须', price: 18, specificIcon: 'fa-solid fa-water' }, // 个别特殊菜品可单独指定图标
-                    { name: '烤鱿鱼板', price: 10, specificIcon: 'fa-solid fa-water' },
-                    { name: '鸭肠小串', price: 10 },
-                    { name: '烤虾', price: 4, specificIcon: 'fa-solid fa-shrimp' },
-                    { name: '烤小黄鱼', price: 4, specificIcon: 'fa-solid fa-fish' }
-                ]
-            },
-            {
-                id: 'veg',
-                category: '素烤',
-                icon: 'fa-solid fa-leaf',
-                itemIcon: 'fa-solid fa-carrot', // 蔬菜意向矢量
-                items: [
-                    { name: '烤面筋', price: 2, specificIcon: 'fa-solid fa-wheat-awn' },
-                    { name: '烤土豆片', price: 8 },
-                    { name: '烤西葫芦', price: 2 },
-                    { name: '烤韭菜', price: 8 },
-                    { name: '烤茄子', price: 16 },
-                    { name: '烤香菇', price: 10 },
-                    { name: '烤甜玉米粒', price: 8, specificIcon: 'fa-solid fa-corn' },
-                    { name: '烤素鸡', price: 8 },
-                    { name: '烤苕皮', price: 8 },
-                    { name: '烤奶香小馒头', price: 6 },
-                    { name: '烤芝士面包', price: 7, specificIcon: 'fa-solid fa-bread-slice' },
-                    { name: '烤河粉', price: 12 },
-                    { name: '芝士焗榴莲', price: 25 },
-                    { name: '芝士焗红薯', price: 18 },
-                    { name: '芝士焗玉米', price: 18 }
-                ]
-            },
-            {
-                id: 'fried',
-                category: '炸物/小食',
-                icon: 'fa-solid fa-utensils',
-                itemIcon: 'fa-solid fa-cookie',
-                items: [
-                    { name: '炸藕条', price: 16 },
-                    { name: '小酥肉', price: 25 },
-                    { name: '红糖糍粑', price: 18 }
-                ]
-            },
-            {
-                id: 'cold',
-                category: '凉菜',
-                icon: 'fa-solid fa-snowflake',
-                itemIcon: 'fa-solid fa-bowl-rice',
-                items: [
-                    { name: '毛豆', price: 10 },
-                    { name: '花生', price: 10 },
-                    { name: '拍黄瓜', price: 10 },
-                    { name: '凉拌藕带', price: 10 }
-                ]
-            },
-            {
-                id: 'beer',
-                category: '啤酒',
-                icon: 'fa-solid fa-beer-mug-empty',
-                itemIcon: 'fa-solid fa-glass-water',
-                items: [
-                    { name: '比利时小麦', price: 18 },
-                    { name: '德式小麦', price: 18 },
-                    { name: '荔枝玫瑰', price: 22 },
-                    { name: '浑浊IPA', price: 28 }
-                ]
-            },
-            {
-                id: 'drink',
-                category: '饮料',
-                icon: 'fa-solid fa-bottle-water',
-                itemIcon: 'fa-solid fa-mug-hot',
-                items: [
-                    { name: '可乐', price: 5, specificIcon: 'fa-solid fa-bottle-droplet' },
-                    { name: '雪碧', price: 5, specificIcon: 'fa-solid fa-bottle-droplet' },
-                    { name: '茉莉花茶', price: 10, specificIcon: 'fa-solid fa-leaf' },
-                    { name: '矿泉水', price: 3, specificIcon: 'fa-solid fa-bottle-water' }
-                ]
-            }
-        ];
+    <div class="footer">窗台烧烤 · 菜单展示页</div>
+  </div>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const navContainer = document.getElementById('nav-container');
-            const menuContainer = document.getElementById('menu-container');
+  <script>
+    const menuData = [
+      {
+        id: "grill",
+        name: "烤肉串",
+        desc: "先点几串肉，再慢慢加",
+        note: "17 款",
+        icon: "skewer",
+        items: [
+          { name: "蒜香鲜牛肉串", price: "4", icon: "skewer", tag: "signature", hint: "招牌" },
+          { name: "安格斯牛肋条串", price: "8", icon: "cube", tag: "recommend", hint: "推荐" },
+          { name: "牛油串", price: "18", icon: "fat", tag: "pairing", hint: "重口满足" },
+          { name: "鲜羊肉串", price: "4", icon: "skewer", tag: "signature", hint: "经典" },
+          { name: "鸡中翅", price: "12", icon: "wing", tag: "", hint: "" },
+          { name: "掌中宝", price: "4", icon: "ring", tag: "", hint: "" },
+          { name: "烤卤鸡爪", price: "10", icon: "claw", tag: "", hint: "" },
+          { name: "酱香五花肉串", price: "3.3", icon: "layers", tag: "pairing", hint: "香口" },
+          { name: "猪肉串", price: "2", icon: "skewer", tag: "", hint: "" },
+          { name: "猪肉筋串", price: "2", icon: "twist", tag: "", hint: "" },
+          { name: "猪脆骨串", price: "3", icon: "bone", tag: "", hint: "" },
+          { name: "腊肠小串", price: "10", icon: "sausage", tag: "pairing", hint: "下酒" },
+          { name: "烤鱿鱼须", price: "18", icon: "tentacle", tag: "", hint: "" },
+          { name: "烤鱿鱼板", price: "10", icon: "sheet", tag: "", hint: "" },
+          { name: "鸭肠小串", price: "10", icon: "curve", tag: "pairing", hint: "脆口" },
+          { name: "烤虾", price: "4", icon: "shrimp", tag: "", hint: "" },
+          { name: "烤小黄鱼", price: "4", icon: "fish", tag: "", hint: "" }
+        ]
+      },
+      {
+        id: "veg",
+        name: "素烤",
+        desc: "穿插着点，更舒服",
+        note: "15 款",
+        icon: "leaf",
+        items: [
+          { name: "烤面筋", price: "2", icon: "twist", tag: "signature", hint: "高频" },
+          { name: "烤土豆片", price: "8", icon: "slice", tag: "recommend", hint: "稳妥好点" },
+          { name: "烤西葫芦", price: "2", icon: "slice", tag: "", hint: "" },
+          { name: "烤韭菜", price: "8", icon: "leaf", tag: "", hint: "" },
+          { name: "烤茄子", price: "16", icon: "eggplant", tag: "signature", hint: "经典大菜" },
+          { name: "烤香菇", price: "10", icon: "mushroom", tag: "", hint: "" },
+          { name: "烤甜玉米粒", price: "8", icon: "corn", tag: "pairing", hint: "甜口缓冲" },
+          { name: "烤素鸡", price: "8", icon: "cube", tag: "", hint: "" },
+          { name: "烤苕皮", price: "8", icon: "sheet", tag: "", hint: "" },
+          { name: "烤奶香小馒头", price: "6", icon: "bun", tag: "recommend", hint: "收尾友好" },
+          { name: "烤芝士面包", price: "7", icon: "bread", tag: "", hint: "" },
+          { name: "烤河粉", price: "12", icon: "noodle", tag: "", hint: "" },
+          { name: "芝士焗榴莲", price: "25", icon: "bake", tag: "", hint: "" },
+          { name: "芝士焗红薯", price: "18", icon: "bake", tag: "", hint: "" },
+          { name: "芝士焗玉米", price: "18", icon: "bake", tag: "", hint: "" }
+        ]
+      },
+      {
+        id: "fried",
+        name: "炸物/小食",
+        desc: "适合穿插，也适合配酒",
+        note: "3 款",
+        icon: "snack",
+        items: [
+          { name: "炸藕条", price: "16", icon: "stick", tag: "pairing", hint: "下酒" },
+          { name: "小酥肉", price: "25", icon: "chunk", tag: "recommend", hint: "推荐" },
+          { name: "红糖糍粑", price: "18", icon: "dessert", tag: "pairing", hint: "甜口收尾" }
+        ]
+      },
+      {
+        id: "cold",
+        name: "凉菜",
+        desc: "先垫一口，也能解腻",
+        note: "4 款",
+        icon: "cool",
+        items: [
+          { name: "毛豆", price: "10", icon: "bean", tag: "pairing", hint: "配酒" },
+          { name: "花生", price: "10", icon: "peanut", tag: "pairing", hint: "配酒" },
+          { name: "拍黄瓜", price: "10", icon: "slice", tag: "recommend", hint: "清口" },
+          { name: "凉拌藕带", price: "10", icon: "ribbon", tag: "", hint: "" }
+        ]
+      },
+      {
+        id: "beer",
+        name: "啤酒",
+        desc: "现打更适合慢慢喝",
+        note: "4 款",
+        icon: "beer",
+        items: [
+          { name: "比利时小麦", price: "18", icon: "beer", tag: "recommend", hint: "容易入口" },
+          { name: "德式小麦", price: "18", icon: "beer", tag: "signature", hint: "主力款" },
+          { name: "荔枝玫瑰", price: "22", icon: "beer", tag: "pairing", hint: "轻甜" },
+          { name: "浑浊IPA", price: "28", icon: "beer", tag: "", hint: "" }
+        ]
+      },
+      {
+        id: "drink",
+        name: "饮料",
+        desc: "不喝酒也有轻松搭配",
+        note: "4 款",
+        icon: "drink",
+        items: [
+          { name: "可乐", price: "5", icon: "cup", tag: "", hint: "" },
+          { name: "雪碧", price: "5", icon: "cup", tag: "", hint: "" },
+          { name: "茉莉花茶", price: "10", icon: "tea", tag: "recommend", hint: "清爽" },
+          { name: "矿泉水", price: "3", icon: "drop", tag: "", hint: "" }
+        ]
+      }
+    ];
 
-            let navHTML = '';
-            let menuHTML = '';
+    function svgIcon(type = "dot") {
+      const color = "currentColor";
+      const stroke = color;
+      const common = 'fill="none" stroke="' + stroke + '" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"';
+      const fillSoft = 'fill="currentColor" fill-opacity=".12" stroke="currentColor" stroke-opacity=".35"';
+      const map = {
+        skewer: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M4 18L19 3"/><circle cx="9" cy="13" r="2.1" ${fillSoft}/><circle cx="12.8" cy="9.2" r="2.1" ${fillSoft}/><circle cx="16.6" cy="5.4" r="2.1" ${fillSoft}/></svg>`,
+        cube: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M12 3l7 4v10l-7 4-7-4V7l7-4z"/><path ${common} d="M12 12l7-5M12 12L5 7M12 12v9"/></svg>`,
+        fat: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M6 8c0-2.2 1.8-4 4-4h4c2.2 0 4 1.8 4 4v8c0 2.2-1.8 4-4 4h-4c-2.2 0-4-1.8-4-4V8z"/><path ${common} d="M9 9h6M9 12h6M9 15h6"/></svg>`,
+        wing: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M6 15c1.5-5.5 5-8 10-9 1.4 3.1 1.1 6-.8 8.5-1.9 2.5-4.7 3.9-8.2 4.5L6 15z"/><path ${common} d="M8.5 12.5l3 3"/></svg>`,
+        ring: `<svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="6.6" ${common}/><circle cx="12" cy="12" r="2.4" ${common}/></svg>`,
+        claw: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M8 19c3.5-1 6.2-3.8 7-8"/><path ${common} d="M10 8l1.6-3.8M13 9l3-4M16 11l4-2.5"/></svg>`,
+        layers: `<svg viewBox="0 0 24 24" width="24" height="24"><rect x="5" y="6" width="14" height="3.2" rx="1.2" ${fillSoft}/><rect x="5" y="10.4" width="14" height="3.2" rx="1.2" ${fillSoft}/><rect x="5" y="14.8" width="14" height="3.2" rx="1.2" ${fillSoft}/></svg>`,
+        twist: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M7 6c2.7 0 3 3 5 3s2.3-3 5-3"/><path ${common} d="M7 18c2.7 0 3-3 5-3s2.3 3 5 3"/><path ${common} d="M8 6v12M16 6v12"/></svg>`,
+        bone: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M7.3 9.2a2.4 2.4 0 1 1 2.8-2.8l4.6 4.6a2.4 2.4 0 1 1-2.8 2.8L7.3 9.2z"/><path ${common} d="M16.7 14.8a2.4 2.4 0 1 1-2.8 2.8l-4.6-4.6a2.4 2.4 0 1 1 2.8-2.8l4.6 4.6z"/></svg>`,
+        sausage: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M7 8c2-1.6 8-1.6 10 0 1.7 1.3 1.7 6.7 0 8-2 1.6-8 1.6-10 0-1.7-1.3-1.7-6.7 0-8z"/><path ${common} d="M5 9c1 0 1 6 0 6M19 9c1 0 1 6 0 6"/></svg>`,
+        tentacle: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M7 6c5 0 10 3 10 8 0 2.7-1.4 4-3.1 4-1.4 0-2.4-.9-2.4-2.1 0-1.1.8-1.8 1.6-2.4"/><path ${common} d="M10 6v6M13 6v5M16 7v4"/></svg>`,
+        sheet: `<svg viewBox="0 0 24 24" width="24" height="24"><rect x="6" y="5" width="12" height="14" rx="2" ${common}/><path ${common} d="M9 9h6M9 12h6M9 15h4"/></svg>`,
+        curve: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M7 7c8 0 10 10 4 10-5 0-3-7 3-7"/></svg>`,
+        shrimp: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M17 9c0-2-1.6-4-4.5-4C8 5 6 8 6 11c0 4 2.5 7 6.2 7 2.5 0 4.8-1.4 5.8-3.8"/><path ${common} d="M17 9h2M15 6l2-1M15 12l2 1"/></svg>`,
+        fish: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M4 12s3.5-5 8-5c4 0 6.5 2.1 8 5-1.5 2.9-4 5-8 5-4.5 0-8-5-8-5z"/><circle cx="13.8" cy="10.2" r="0.9" fill="currentColor"/></svg>`,
+        leaf: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M18 5c-7 .6-11 4.7-12 12 7-.7 11.2-4.8 12-12z"/><path ${common} d="M7 17c2.8-2.9 5.6-5.3 9-7.2"/></svg>`,
+        slice: `<svg viewBox="0 0 24 24" width="24" height="24"><ellipse cx="12" cy="12" rx="7" ry="4.8" ${common}/><path ${common} d="M8.7 9.7c1.2 1 2.2 1.5 3.3 1.5 1.2 0 2.3-.5 3.3-1.5"/><path ${common} d="M8.7 14.3c1.2-1 2.2-1.5 3.3-1.5 1.2 0 2.3.5 3.3 1.5"/></svg>`,
+        eggplant: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M13 6c4 0 5.5 2.4 5.5 5.8 0 4.3-2.8 7.2-6.7 7.2-3.2 0-5.3-2.3-5.3-5.2C6.5 9.8 9 6 13 6z"/><path ${common} d="M10.5 6c.3-1.2 1.1-2 2.2-2 1 0 1.8.5 2.3 1.3"/><path ${common} d="M11 4.8c-.8.5-1.5 1-2 1.8"/></svg>`,
+        mushroom: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M6 11c0-3.3 2.7-6 6-6s6 2.7 6 6H6z"/><path ${common} d="M10 11v5.3c0 1.2.8 1.7 2 1.7s2-.5 2-1.7V11"/></svg>`,
+        corn: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M12 5c2.5 0 4.2 2.6 4.2 6.3 0 4.1-1.8 7.7-4.2 7.7s-4.2-3.6-4.2-7.7C7.8 7.6 9.5 5 12 5z"/><path ${common} d="M10 8v7M12 7v9M14 8v7"/></svg>`,
+        bun: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M6 13c0-4.2 2.7-6.5 6-6.5s6 2.3 6 6.5H6z"/><path ${common} d="M5.5 13.5h13"/><path ${common} d="M8.5 10.3h0M12 9.5h0M15.5 10.3h0"/></svg>`,
+        bread: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M7 8c0-2.2 1.8-4 4-4 1.2 0 2.3.5 3 1.3.7-.5 1.5-.8 2.5-.8 2.2 0 4 1.8 4 4v7.3c0 1.8-1.4 3.2-3.2 3.2H8.7c-1.8 0-3.2-1.4-3.2-3.2V8z"/></svg>`,
+        noodle: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M6 8h12M7 11.5c0 3 2 5.5 5 5.5s5-2.5 5-5.5"/><path ${common} d="M8.5 8l-1.2 8M12 8v9M15.5 8l1.2 8"/></svg>`,
+        bake: `<svg viewBox="0 0 24 24" width="24" height="24"><rect x="5" y="9" width="14" height="9" rx="2" ${common}/><path ${common} d="M8 9c0-1.8 1.2-3 3-3M12 9c0-2 1.2-3.7 3.2-4.7"/></svg>`,
+        snack: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M7 7h10l-1 11H8L7 7z"/><path ${common} d="M9 7V5h6v2"/><path ${common} d="M10 11l1 2 1-1 2 2 1-3"/></svg>`,
+        stick: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M8 6l8 12M11 5l8 12M5 9l8 12"/></svg>`,
+        chunk: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M7 8l5-3 5 3v8l-5 3-5-3V8z"/><path ${common} d="M7 8l5 3 5-3"/></svg>`,
+        dessert: `<svg viewBox="0 0 24 24" width="24" height="24"><rect x="6" y="11" width="12" height="7" rx="2" ${common}/><path ${common} d="M8 11c0-2.5 1.3-4 4-4s4 1.5 4 4"/><path ${common} d="M10 7.2c0-.8.6-1.4 1.4-1.4"/></svg>`,
+        cool: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M12 4v16M6 8l12 8M6 16l12-8"/><circle cx="12" cy="12" r="2.6" ${common}/></svg>`,
+        bean: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M10 6c-2.8 0-4.5 2.2-4.5 5s1.7 5 4.5 5c4 0 6-2.5 6-5.5S14 6 10 6z"/><path ${common} d="M9 8c1 .5 1.7 1.3 2 2.4"/></svg>`,
+        peanut: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M9.5 6c-2 0-3.5 1.7-3.5 3.8 0 1.2.5 2.3 1.3 3-.8.8-1.3 1.8-1.3 3 0 2.1 1.5 3.8 3.5 3.8 1.2 0 2.2-.6 2.9-1.5.7.9 1.7 1.5 2.9 1.5 2 0 3.5-1.7 3.5-3.8 0-1.2-.5-2.3-1.3-3 .8-.7 1.3-1.8 1.3-3 0-2.1-1.5-3.8-3.5-3.8-1.2 0-2.2.6-2.9 1.5C11.7 6.6 10.7 6 9.5 6z"/></svg>`,
+        ribbon: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M7 8c2.4 0 2.4 4 4.8 4S14.2 8 16.6 8c1.4 0 2.4.8 2.4 2s-1 2-2.4 2c-2.4 0-2.4 4-4.8 4S9.4 12 7 12c-1.4 0-2.4-.8-2.4-2S5.6 8 7 8z"/></svg>`,
+        beer: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M7 7h8v10.5c0 1.4-1.1 2.5-2.5 2.5h-3C8.1 20 7 18.9 7 17.5V7z"/><path ${common} d="M15 9h2c1.1 0 2 .9 2 2v1c0 1.1-.9 2-2 2h-2"/><path ${common} d="M8.5 5.5h1M11 4.8h1M13.5 5.5h1"/></svg>`,
+        drink: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M8 6h8l-1 12a2 2 0 0 1-2 1.8h-2A2 2 0 0 1 9 18L8 6z"/><path ${common} d="M10 6V4h4"/></svg>`,
+        cup: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M8 6h8l-1 12H9L8 6z"/><path ${common} d="M10 4h4"/></svg>`,
+        tea: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M7 8h9v5.5A4.5 4.5 0 0 1 11.5 18h0A4.5 4.5 0 0 1 7 13.5V8z"/><path ${common} d="M16 9h1.8A2.2 2.2 0 0 1 20 11.2v.1A2.7 2.7 0 0 1 17.3 14H16"/><path ${common} d="M10 5c0 1-.8 1.3-.8 2.3M13 5c0 1-.8 1.3-.8 2.3"/></svg>`,
+        drop: `<svg viewBox="0 0 24 24" width="24" height="24"><path ${common} d="M12 4c3.2 4 5 6.8 5 9.3A5 5 0 0 1 7 13.3C7 10.8 8.8 8 12 4z"/></svg>`,
+        default: `<svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="5" ${common}/></svg>`
+      };
+      return map[type] || map.default;
+    }
 
-            menuData.forEach((cat, index) => {
-                navHTML += `<a href="#${cat.id}" class="nav-item ${index === 0 ? 'active' : ''}" data-target="${cat.id}">${cat.category}</a>`;
+    function tagClass(tag){
+      if(tag === "recommend") return "recommend";
+      if(tag === "signature") return "signature";
+      if(tag === "pairing") return "pairing";
+      return "";
+    }
 
-                let itemsHTML = cat.items.map(item => {
-                    // 如果单品有特定图标则用特定图标，否则用分类通用图标
-                    const finalIcon = item.specificIcon ? item.specificIcon : cat.itemIcon;
-                    return `
-                    <div class="item-card">
-                        <div class="item-icon-wrapper">
-                            <i class="${finalIcon}"></i>
-                        </div>
-                        <div class="item-name">${item.name}</div>
-                        <div class="item-price">${item.price}</div>
-                    </div>
-                `}).join('');
+    function tagText(tag){
+      if(tag === "recommend") return "推荐";
+      if(tag === "signature") return "招牌";
+      if(tag === "pairing") return "下酒";
+      return "";
+    }
 
-                menuHTML += `
-                    <section id="${cat.id}" class="category-section">
-                        <div class="category-header">
-                            <i class="${cat.icon}"></i>
-                            <h2>${cat.category}</h2>
-                        </div>
-                        <div class="items-grid">
-                            ${itemsHTML}
-                        </div>
-                    </section>
-                `;
-            });
+    function renderNav(data) {
+      const nav = document.getElementById("categoryNav");
+      nav.innerHTML = data.map(section => `
+        <a href="#${section.id}">${section.name}</a>
+      `).join("");
+    }
 
-            navContainer.innerHTML = navHTML;
-            menuContainer.innerHTML = menuHTML;
+    function renderMenu(data) {
+      const root = document.getElementById("menuRoot");
+      root.innerHTML = data.map(section => `
+        <section class="section" id="${section.id}">
+          <div class="section-head">
+            <div class="section-title-wrap">
+              <div class="section-icon">${svgIcon(section.icon)}</div>
+              <div class="section-title-block">
+                <h2 class="section-title">${section.name}</h2>
+                <div class="section-desc">${section.desc || ""}</div>
+              </div>
+            </div>
+            <div class="section-note">${section.note}</div>
+          </div>
+          <div class="grid">
+            ${section.items.map(item => `
+              <article class="item ${item.tag ? 'recommended' : ''}">
+                <div class="icon">${svgIcon(item.icon)}</div>
+                <div class="meta">
+                  <div class="title-row">
+                    <div class="name">${item.name}</div>
+                    ${item.tag ? `<span class="tag ${tagClass(item.tag)}">${tagText(item.tag)}</span>` : ``}
+                  </div>
+                  <div class="subline">
+                    ${item.hint ? `<span class="hint">${item.hint}</span>` : `<span>${section.name}</span>`}
+                  </div>
+                </div>
+                <div class="price ${item.tag ? 'hot' : ''}" aria-label="价格 ${item.price} 元">
+                  <span class="unit">¥</span>
+                  <span class="num">${item.price}</span>
+                </div>
+              </article>
+            `).join("")}
+          </div>
+        </section>
+      `).join("");
+    }
 
-            const sections = document.querySelectorAll('.category-section');
-            const navItems = document.querySelectorAll('.nav-item');
-
-            window.addEventListener('scroll', () => {
-                let current = '';
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    if (pageYOffset >= (sectionTop - 150)) {
-                        current = section.getAttribute('id');
-                    }
-                });
-
-                navItems.forEach(item => {
-                    item.classList.remove('active');
-                    if (item.getAttribute('data-target') === current) {
-                        item.classList.add('active');
-                        const navCenter = item.offsetLeft - (navContainer.offsetWidth / 2) + (item.offsetWidth / 2);
-                        navContainer.scrollTo({ left: navCenter, behavior: 'smooth' });
-                    }
-                });
-            });
-            
-            navItems.forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('data-target');
-                    const targetSection = document.getElementById(targetId);
-                    window.scrollTo({
-                        top: targetSection.offsetTop - 60,
-                        behavior: 'smooth'
-                    });
-                });
-            });
-        });
-    </script>
+    renderNav(menuData);
+    renderMenu(menuData);
+  </script>
 </body>
 </html>
